@@ -17,6 +17,7 @@ local SilentAimSettings = {
     
     FOVRadius = 130,
     FOVVisible = false,
+    FOVColor = Color3.fromRGB(255, 255, 255)
     ShowSilentAimTarget = false, 
     
     MouseHitPrediction = false,
@@ -149,17 +150,17 @@ local function IsPlayerVisible(Player)
 end
 
 local function getClosestPlayer()
-    if not Options.TargetPart.Value then return end
+    if not Settings.TargetPart then return end
     local Closest
     local DistanceToMouse
     for _, Player in next, GetPlayers(Players) do
         if Player == LocalPlayer then continue end
-        if Toggles.TeamCheck.Value and Player.Team == LocalPlayer.Team then continue end
+        if Settings.TeamCheck and Player.Team == LocalPlayer.Team then continue end
 
         local Character = Player.Character
         if not Character then continue end
         
-        if Toggles.VisibleCheck.Value and not IsPlayerVisible(Player) then continue end
+        if Settings.VisibleCheck and not IsPlayerVisible(Player) then continue end
 
         local HumanoidRootPart = FindFirstChild(Character, "HumanoidRootPart")
         local Humanoid = FindFirstChild(Character, "Humanoid")
@@ -169,8 +170,8 @@ local function getClosestPlayer()
         if not OnScreen then continue end
 
         local Distance = (getMousePosition() - ScreenPosition).Magnitude
-        if Distance <= (DistanceToMouse or Options.Radius.Value or 2000) then
-            Closest = ((Options.TargetPart.Value == "Random" and Character[ValidTargetParts[math.random(1, #ValidTargetParts)]]) or Character[Options.TargetPart.Value])
+        if Distance <= (DistanceToMouse or SilentAimSettings.FOVRadius or 2000) then
+            Closest = ((SilentAimSettings.TargetPart == "Random" and Character[ValidTargetParts[math.random(1, #ValidTargetParts)]]) or Character[SilentAimSettings.TargetPart])
             DistanceToMouse = Distance
         end
     end
@@ -179,7 +180,7 @@ end
 
 resume(create(function()
     RenderStepped:Connect(function()
-        if Toggles.MousePosition.Value and Toggles.aim_Enabled.Value then
+        if SilentAimSettings.ShowSilentAimTarget and SilentAimSettings.Enabled then
             if getClosestPlayer() then 
                 local Root = getClosestPlayer().Parent.PrimaryPart or getClosestPlayer()
                 local RootToViewportPoint, IsOnScreen = WorldToViewportPoint(Camera, Root.Position);
@@ -194,8 +195,8 @@ resume(create(function()
         end
         
         if Toggles.Visible.Value then 
-            fov_circle.Visible = Toggles.Visible.Value
-            fov_circle.Color = Options.Color.Value
+            fov_circle.Visible = SilentAimSettings.FOVVisible
+            fov_circle.Color = SilentAimSettings.FOVColor
             fov_circle.Position = getMousePosition()
         end
     end)
@@ -208,8 +209,8 @@ oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
     local Arguments = {...}
     local self = Arguments[1]
     local chance = CalculateChance(SilentAimSettings.HitChance)
-    if Toggles.aim_Enabled.Value and self == workspace and not checkcaller() and chance == true then
-        if Method == "FindPartOnRayWithIgnoreList" and Options.Method.Value == Method then
+    if SilentAimSettings.Enabled and self == workspace and not checkcaller() and chance == true then
+        if Method == "FindPartOnRayWithIgnoreList" and SilentAimSettings.Method == Method then
             if ValidateArguments(Arguments, ExpectedArguments.FindPartOnRayWithIgnoreList) then
                 local A_Ray = Arguments[2]
 
@@ -222,7 +223,7 @@ oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
                     return oldNamecall(unpack(Arguments))
                 end
             end
-        elseif Method == "FindPartOnRayWithWhitelist" and Options.Method.Value == Method then
+        elseif Method == "FindPartOnRayWithWhitelist" and SilentAimSettings.Method == Method then
             if ValidateArguments(Arguments, ExpectedArguments.FindPartOnRayWithWhitelist) then
                 local A_Ray = Arguments[2]
 
@@ -235,7 +236,7 @@ oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
                     return oldNamecall(unpack(Arguments))
                 end
             end
-        elseif (Method == "FindPartOnRay" or Method == "findPartOnRay") and Options.Method.Value:lower() == Method:lower() then
+        elseif (Method == "FindPartOnRay" or Method == "findPartOnRay") and SilentAimSettings.Method:lower() == Method:lower() then
             if ValidateArguments(Arguments, ExpectedArguments.FindPartOnRay) then
                 local A_Ray = Arguments[2]
 
@@ -248,7 +249,7 @@ oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
                     return oldNamecall(unpack(Arguments))
                 end
             end
-        elseif Method == "Raycast" and Options.Method.Value == Method then
+        elseif Method == "Raycast" and SilentAimSettings.Method == Method then
             if ValidateArguments(Arguments, ExpectedArguments.Raycast) then
                 local A_Origin = Arguments[2]
 
@@ -266,13 +267,13 @@ end))
 
 local oldIndex = nil 
 oldIndex = hookmetamethod(game, "__index", newcclosure(function(self, Index)
-    if self == Mouse and not checkcaller() and Toggles.aim_Enabled.Value and Options.Method.Value == "Mouse.Hit/Target" and getClosestPlayer() then
+    if self == Mouse and not checkcaller() and SilentAImSettings.Enabled and SilentAimSettings.Method == "Mouse.Hit/Target" and getClosestPlayer() then
         local HitPart = getClosestPlayer()
          
         if Index == "Target" or Index == "target" then 
             return HitPart
         elseif Index == "Hit" or Index == "hit" then 
-            return ((Toggles.Prediction.Value and (HitPart.CFrame + (HitPart.Velocity * PredictionAmount))) or (not Toggles.Prediction.Value and HitPart.CFrame))
+            return ((SilentAimSettings.MouseHitPrediction and (HitPart.CFrame + (HitPart.Velocity * SilentAimSettings.MouseHitPredictionAmount))) or (not SilentAimSettings.MouseHitPrediction and HitPart.CFrame))
         elseif Index == "X" or Index == "x" then 
             return self.X 
         elseif Index == "Y" or Index == "y" then 
@@ -284,3 +285,5 @@ oldIndex = hookmetamethod(game, "__index", newcclosure(function(self, Index)
 
     return oldIndex(self, Index)
 end))
+
+return SilentAimSettings
