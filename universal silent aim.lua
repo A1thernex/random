@@ -5,7 +5,7 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
-local SilentAimSettings = {
+getgenv().SilentAimSettings = {
     Enabled = false,
     
     ClassName = "Universal Silent Aim - Averiias, Stefanuk12, xaxa", -- credits to them
@@ -24,9 +24,6 @@ local SilentAimSettings = {
     MouseHitPredictionAmount = 0.165,
     HitChance = 100
 }
-
--- variables
-getgenv().SilentAimSettings = Settings
 
 local Camera = workspace.CurrentCamera
 local Players = game:GetService("Players")
