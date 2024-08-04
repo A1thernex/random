@@ -17,7 +17,7 @@ getgenv().SilentAimSettings = {
     
     FOVRadius = 130,
     FOVVisible = false,
-    FOVColor = Color3.fromRGB(255, 255, 255)
+    FOVColor = Color3.fromRGB(255, 255, 255),
     ShowSilentAimTarget = false, 
     
     MouseHitPrediction = false,
