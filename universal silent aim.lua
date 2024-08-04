@@ -18,7 +18,6 @@ getgenv().SilentAimSettings = {
     FOVRadius = 130,
     FOVVisible = false,
     FOVColor = Color3.fromRGB(255, 255, 255),
-    ShowSilentAimTarget = false, 
     
     MouseHitPrediction = false,
     MouseHitPredictionAmount = 0.165,
@@ -47,14 +46,6 @@ local create = coroutine.create
 
 local ValidTargetParts = {"Head", "HumanoidRootPart"}
 local PredictionAmount = 0.165
-
-local mouse_box = Drawing.new("Square")
-mouse_box.Visible = true 
-mouse_box.ZIndex = 999 
-mouse_box.Color = Color3.fromRGB(54, 57, 241)
-mouse_box.Thickness = 20 
-mouse_box.Size = Vector2.new(20, 20)
-mouse_box.Filled = true 
 
 local fov_circle = Drawing.new("Circle")
 fov_circle.Thickness = 1
@@ -177,20 +168,6 @@ end
 
 resume(create(function()
     RenderStepped:Connect(function()
-        if SilentAimSettings.ShowSilentAimTarget and SilentAimSettings.Enabled then
-            if getClosestPlayer() then 
-                local Root = getClosestPlayer().Parent.PrimaryPart or getClosestPlayer()
-                local RootToViewportPoint, IsOnScreen = WorldToViewportPoint(Camera, Root.Position);
-                -- using PrimaryPart instead because if your Target Part is "Random" it will flicker the square between the Target's Head and HumanoidRootPart (its annoying)
-                
-                mouse_box.Visible = IsOnScreen
-                mouse_box.Position = Vector2.new(RootToViewportPoint.X, RootToViewportPoint.Y)
-            else 
-                mouse_box.Visible = false 
-                mouse_box.Position = Vector2.new()
-            end
-        end
-        
         if SilentAimSettings.FOVVisible then 
             fov_circle.Visible = SilentAimSettings.FOVVisible
             fov_circle.Color = SilentAimSettings.FOVColor
