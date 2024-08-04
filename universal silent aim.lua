@@ -191,7 +191,7 @@ resume(create(function()
             end
         end
         
-        if Toggles.Visible.Value then 
+        if SilentAimSettings.FOVVisible then 
             fov_circle.Visible = SilentAimSettings.FOVVisible
             fov_circle.Color = SilentAimSettings.FOVColor
             fov_circle.Position = getMousePosition()
