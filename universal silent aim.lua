@@ -172,7 +172,7 @@ resume(create(function()
             fov_circle.Visible = SilentAimSettings.FOVVisible
             fov_circle.Color = SilentAimSettings.FOVColor
             fov_circle.Position = getMousePosition()
-            fov_circle.Radius = SilentAimSettngs.FOVRadius
+            fov_circle.Radius = SilentAimSettings.FOVRadius
         end
     end)
 end))
