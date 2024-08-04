@@ -242,7 +242,7 @@ end))
 
 local oldIndex = nil 
 oldIndex = hookmetamethod(game, "__index", newcclosure(function(self, Index)
-    if self == Mouse and not checkcaller() and SilentAImSettings.Enabled and SilentAimSettings.Method == "Mouse.Hit/Target" and getClosestPlayer() then
+    if self == Mouse and not checkcaller() and SilentAimSettings.Enabled and SilentAimSettings.Method == "Mouse.Hit/Target" and getClosestPlayer() then
         local HitPart = getClosestPlayer()
          
         if Index == "Target" or Index == "target" then 
