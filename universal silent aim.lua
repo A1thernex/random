@@ -14,9 +14,9 @@ getgenv().SilentAimSettings = {
     VisibleCheck = false, 
     TargetPart = "HumanoidRootPart",
     SilentAimMethod = "Raycast",
-    
-    FOVRadius = 130,
+
     FOVVisible = false,
+    FOVRadius = 130,
     FOVColor = Color3.fromRGB(255, 255, 255),
     
     MouseHitPrediction = false,
@@ -50,7 +50,7 @@ local PredictionAmount = 0.165
 local fov_circle = Drawing.new("Circle")
 fov_circle.Thickness = 1
 fov_circle.NumSides = 100
-fov_circle.Radius = 180
+fov_circle.Radius = 130
 fov_circle.Filled = false
 fov_circle.Visible = false
 fov_circle.ZIndex = 999
@@ -172,6 +172,7 @@ resume(create(function()
             fov_circle.Visible = SilentAimSettings.FOVVisible
             fov_circle.Color = SilentAimSettings.FOVColor
             fov_circle.Position = getMousePosition()
+            fov_circle.Radius = SilentAimSettngs.FOVRadius
         end
     end)
 end))
