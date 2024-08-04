@@ -8,7 +8,7 @@ end
 getgenv().SilentAimSettings = {
     Enabled = false,
     
-    ClassName = "Universal Silent Aim - Averiias, Stefanuk12, xaxa", -- credits to them
+    Credits = "Averiias, Stefanuk12, xaxa",
     
     TeamCheck = false,
     VisibleCheck = false, 
