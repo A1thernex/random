@@ -594,7 +594,7 @@ local theme = {
     textcolor = Color3.fromRGB(255, 255, 255),
     textdark = Color3.fromRGB(175, 175, 175),
     textborder = Color3.fromRGB(0, 0, 0),
-    cursoroutline = Color3.fromRGB(10, 10, 10),
+    cursoroutline = Color3.fromRGB(255, 255, 255),
     font = 0,
     textsize = 13
 }
@@ -1225,7 +1225,7 @@ do
             local cursor = utility:Create("Triangle", nil, {
                 Color = theme.cursoroutline,
                 Thickness = 2.5,
-                Filled = false,
+                Filled = true,
                 ZIndex = 65,
                 Hidden = true
             });window.cursor["cursor"] = cursor
