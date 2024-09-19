@@ -60,7 +60,7 @@ makeFunction({"gethrp", "getHrp", "GetHrp", "GetHRP"}, function(plr: Player)
 	plrAlive, char = alive(plr)
 
 	if plrAlive then
-		return char.HumanoidRootPart
+		return char:FindFirstChild("HumanoidRootPart") and char.HumanoidRootPart
 	end
 end)
 
@@ -70,7 +70,7 @@ makeFunction({"gethum", "gethumanoid", "getHum", "getHumanoid", "GetHum", "GetHu
 	plrAlive, char = alive(plr)
 
 	if plrAlive then
-		return char.Humanoid
+		return char:FindFirstChild("Humanoid") and char.Humanoid
 	end
 end)
 
