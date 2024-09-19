@@ -46,7 +46,7 @@ makeFunction({"isalive", "alive", "isAlive", "IsAlive", "Alive"}, function(plr: 
 	plrchar = plr:IsA("Model") and plr or plr.Character
 
 	if plrchar then
-		if plrchar.Humanoid and plrchar.HumanoidRootPart then
+		if plrchar:FindFirstChild("Humanoid") and plrchar:FindFirstChild("HumanoidRootPart") then
 			return true, plrchar
 		end
 	end
