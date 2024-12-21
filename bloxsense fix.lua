@@ -5587,7 +5587,7 @@ do
     UILibrary:CreateButton({Name = "Knife Bot", Tab = "Rage", Section = "Aimbot", KeyBind = "None", Tooltip = "Controls if the aimbot will aim with the knife"})
     UILibrary:CreateSlider({Name = "Knife Bot Range", Tab = "Rage", Section = "Aimbot", MinimumNumber = 1, MaximumNumber = 64, Suffix = " st.", Tooltip = "Controls how close an enemy must be to you before being considered for being knifed"})
     UILibrary:CreateDropdown({Name = "Knife Bot Type", Tab = "Rage", Section = "Aimbot", Values = {"Single Aura", "Multi Aura"}, Tooltip = "Controls the type of knife bot. Multi Aura rapidly stabs all targets at the same time within the radius regardless of obstruction."})
-    UILibrary:CreateButton({Name = "Log Shots", Tab = "Rage", Section = "Aimbot", KeyBind = "None", Tooltip = "Logs every successful shot with detailed information."})
+    UILibrary:CreateButton({Name = "Log Shots", Tab = "Rage", Section = "Aimbot", Tooltip = "Logs every successful shot with detailed information."})
 
     UILibrary:CreateSlider({Name = "Maximum Hitscanning Points", Tab = "Rage", Section = "Hack vs. Hack", Suffix = "", MinimumNumber = 8, MaximumNumber = 64, Tooltip = "Controls the maximum number of scans per frame the aimbot is allowed to do. Turn this down for better performance."})
     UILibrary:CreateButton({Name = "Autowall Hitscan", Tab = "Rage", Section = "Hack vs. Hack", Tooltip = "Controls if the aimbot scans around your player for multiple places to shoot from other than your player. Not recommended for typical hack versus hack."})
@@ -10655,7 +10655,9 @@ do --ANCHOR Ragebot
             -- stop looking at my girl ragebot
 
             if Menu["Rage"]["Aimbot"]["Log Shots"]["Toggle"]["Enabled"] then
+                setthreadidenntity(3)
                 Library.UI:EventLog("Shot at " .. ragebot.currenttarget.player.Name .. " for " .. tostring(math.floor(Parameters.damageInflicted + 0.5)) .. ", in the " .. ragebot.currenttarget.instance.Name .. "\n( " .. tostring(math.clamp(math.floor(Parameters.instance.Parent.Humanoid.Health - (Parameters.damageInflicted * client.gun.Bullets.Value) + 0.5), 0, 100)) .. " hp remaining)" .. " (type: " .. Parameters.type .. ", origin: " .. Parameters.origintype .. ")", 2.5)
+                setthreadidentity(8)
             end
         end
     end
