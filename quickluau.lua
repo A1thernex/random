@@ -4,7 +4,6 @@
 	
 	Version 1.2 - Updated 25.08.24
 
-	Made by ampers&nd
 	Inspiration from "Utility" by liablelua
 ]]
 
