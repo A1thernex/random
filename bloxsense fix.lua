@@ -12610,10 +12610,10 @@ do -- ANCHOR hooks n shitter
                         fakeSkinOwner["SkinFolder"][args[1][2] .. "Folder"][currentModel] = {Value = currentSkin}
                     end
                 end
-            elseif self.Name == hitPart.Name then
+            --[[elseif self.Name == hitPart.Name then
                 args[1] = ragebot.currenttarget.instance
                 args[2] = ragebot.currenttarget.position
-                return oldNamecall(self, table.unpack(args,1,select("#",...)))
+                return oldNamecall(self, table.unpack(args,1,select("#",...)))]]
             elseif self.Name == controlTurn.Name then
                 args[1] = ragebot.lastpitchangle
                 return oldNamecall(self, table.unpack(args,1,select("#",...)))
@@ -12645,6 +12645,8 @@ do -- ANCHOR hooks n shitter
             elseif self.Name == fallDamage.Name and Menu["Misc"]["Tweaks"]["Bypass Fall Damage"]["Toggle"]["Enabled"] and args[1] == args[1] then
                 return
             elseif self.Name == hitPart.Name and not Menu["Misc"]["Extra"]["Kill All"]["Toggle"]["Enabled"] then
+                args[1] = ragebot.currenttarget.instance
+                args[2] = ragebot.currenttarget.position
                 local dude = ragebot.currenttarget.player
                 if ragebot.currenttarget.player ~= nil and Menu["Rage"]["Aimbot"]["Auto Shoot"]["Toggle"]["Enabled"] == false then
                     args[1] = ragebot.currenttarget.instance
@@ -12684,7 +12686,7 @@ do -- ANCHOR hooks n shitter
                 end)
 
                 if Menu["Visuals"]["Bullets"]["Bullet Tracers"]["Toggle"]["Enabled"] then -- nearly done"
-                    task.spawn(visuals.bulletTracer, args[14] and args[10] or nil, ya) -- can u like dn
+                    task.spawn(visuals.bulletTracer, nil, ragebot.currenttarget.position) -- can u like dn
                 end
 
                 if args[14] == "r" then
@@ -13084,19 +13086,19 @@ do
         "рџ–ҐпёЏрџ–ҐпёЏ SERVER SMOKED рџ–ҐпёЏрџ–ҐпёЏ",
         "рџ–ҐпёЏрџ–ҐпёЏ SERVER SMOKED BY BLOXSENSE рџ–ҐпёЏрџ–ҐпёЏ",
         "рџ¤рџ¤рџ¤ SERVER GONE рџ¤рџ¤рџ¤",
-        "вљ пёЏрџљЁ RIP SERVER рџљЁвљ пёЏ",
+        "вљ пёЏрџљЁ RIP SERVER рџљЁвљ пёЏ",
         "рџ¤¤рџ¤¤ Ahh~ Its so Hard~  Its time to pleasure  Master~ рџ­рџ­",
         "рџ¤¤рџ¤¤ Its time to pleasure  Master~",
         "рџ¤¤рџ¤¤ Time to milk master~ UwU~ рџќрџќ",
         "рџ¤¤рџ¤¤ Do you like this Master?~ рџ¤¤рџ¤¤",
-        "рџљЁвљ пёЏрџљЁ SERVER CLOSED FOR MAINTENANCE рџљЁвљ пёЏрџљЁ",
+        "рџљЁвљ пёЏрџљЁ SERVER CLOSED FOR MAINTENANCE рџљЁвљ пёЏрџљЁ",
         "SERVER CLOSED BY BLOXSENSE",
         "рџЊ±рџЊ± TIME TO TOUCH GRASS рџЊ±рџЊ±",
         "Master gives me milk all day you wanna come with me?~ рџ‰рџ‰",
-        "рџљЁвљ пёЏ SERVER CLOSED UNTIL FURTHER NOTICE вљ пёЏрџљЁ",
+        "рџљЁвљ пёЏ SERVER CLOSED UNTIL FURTHER NOTICE вљ пёЏрџљЁ",
         "рџ”’рџ”’рџ”’рџ”’ SERVER LOCKED рџ”’рџ”’рџ”’рџ”’",
         "рџ­рџ­ NOOO DONT CRASH THE SERVER рџ­рџ­",
-        "вљ пёЏ SERVER CLOSED вљ пёЏ",
+        "вљ пёЏ SERVER CLOSED вљ пёЏ",
         "вЃпёЏвЃпёЏ SERVER JUST WENT UP IN SMOKE вЃпёЏвЃпёЏ",
         "*POOF* SERVER GONE *POOF*",
         "а¶ћ а¶ћ а¶ћ а¶ћ а¶ћ а¶ћ а¶ћ",
