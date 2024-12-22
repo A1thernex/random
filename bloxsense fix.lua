@@ -10655,7 +10655,7 @@ do --ANCHOR Ragebot
             -- stop looking at my girl ragebot
 
             if Menu["Rage"]["Aimbot"]["Log Shots"]["Toggle"]["Enabled"] then
-                setthreadidenntity(3)
+                setthreadidentity(3)
                 Library.UI:EventLog("Shot at " .. ragebot.currenttarget.player.Name .. " for " .. tostring(math.floor(Parameters.damageInflicted + 0.5)) .. ", in the " .. ragebot.currenttarget.instance.Name .. "\n( " .. tostring(math.clamp(math.floor(Parameters.instance.Parent.Humanoid.Health - (Parameters.damageInflicted * client.gun.Bullets.Value) + 0.5), 0, 100)) .. " hp remaining)" .. " (type: " .. Parameters.type .. ", origin: " .. Parameters.origintype .. ")", 2.5)
                 setthreadidentity(8)
             end
