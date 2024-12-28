@@ -11803,6 +11803,11 @@ do --ANCHOR Movement
                         ragebot.fakehrp.CanCollide = false
                     end
                 end
+                if Menu["Misc"]["Tweaks"]["Custom Gravity"]["Toggle"]["Enabled"] then
+                    workspace.Gravity = ["Misc"]["Tweaks"]["Gravity Level"]["Value"]
+                else
+                    workspace.Gravity = 169
+                end
                 if Menu["Misc"]["Tweaks"]["Remove Crouch Cooldown"]["Toggle"]["Enabled"] then
                     client.crouchcooldown = 0
                 end
