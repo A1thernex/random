@@ -11804,7 +11804,7 @@ do --ANCHOR Movement
                     end
                 end
                 if Menu["Misc"]["Tweaks"]["Custom Gravity"]["Toggle"]["Enabled"] then
-                    workspace.Gravity = ["Misc"]["Tweaks"]["Gravity Level"]["Value"]
+                    workspace.Gravity = Menu["Misc"]["Tweaks"]["Gravity Level"]["Value"]
                 else
                     workspace.Gravity = 169
                 end
