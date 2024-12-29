@@ -2,7 +2,7 @@
 	QuickLuau - Developer Utility
 	Making developing quicker by creating useful and easy-to-write functions.
 	
-	Version 1.2 - Updated 29.12.24
+	Version 1.21 - Updated 29.12.24
 
 	Inspiration from "Utility" by liablelua
 ]]
