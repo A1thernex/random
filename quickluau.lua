@@ -2,7 +2,7 @@
 	QuickLuau - Developer Utility
 	Making developing quicker by creating useful and easy-to-write functions.
 	
-	Version 1.2 - Updated 25.08.24
+	Version 1.2 - Updated 29.12.24
 
 	Inspiration from "Utility" by liablelua
 ]]
@@ -157,22 +157,25 @@ makeFunction({"getrnbw", "getRnbw", "GetRnbw", "getrainbow", "getRainbow", "GetR
 end)
 
 makeFunction({"closest", "Closest", "getclosest", "getClosest", "GetClosest", "getclosestplr", "getClosestPlr", "GetClosestPlr", "getclosestplayer", "getClosestPlayer", "GetClosestPlayer"}, function(mode: string, instance: Instance)
-	local distance = huge
 	local mouseDistance = 2000
 	local closest = nil
+    local distance = huge
 
 	local lplrAlive, lplrChar = alive()
 
 	if mode == "distance" then
 		if not instance then
 			for _, plr in pairs(getplrs()) do
+                if plr == lplr then continue end
+
 				local plrAlive, plrChar = alive(plr)
 
 				if plrAlive and lplrAlive then
-					local magnitude = (plrChar.HumanoidRootPart.Position - lplrChar.HumanoidRootPart.Position).magnitude
+					local magnitude = (lplrChar.HumanoidRootPart.Position - plrChar.HumanoidRootPart.Position).magnitude
 
 					if magnitude < distance then
 						closest = plr 
+                        distance = magnitude
 					end
 				end
 			end
