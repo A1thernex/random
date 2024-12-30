@@ -5812,13 +5812,13 @@ do
 
     UILibrary:CreateButton({Name = "Enabled", Tab = "Misc", Section = "Weapon Modifications"})
     UILibrary:CreateSlider({Name = "Fire Rate Scale", Tab = "Misc", Section = "Weapon Modifications", MinimumNumber = 100, MaximumNumber = 1200, Suffix = "%", MaximumText = "Rapid"})
-    UILibrary:CreateSlider({Name = "Recoil Scale", Tab = "Misc", Section = "Weapon Modifications", MinimumNumber = 0, MaximumNumber = 100, Suffix = "%"})
     UILibrary:CreateButton({Name = "Instant Equip", Tab = "Misc", Section = "Weapon Modifications"})
     UILibrary:CreateButton({Name = "Instant Reload", Tab = "Misc", Section = "Weapon Modifications"})
     UILibrary:CreateButton({Name = "Infinite Ammo", Tab = "Misc", Section = "Weapon Modifications"})
     UILibrary:CreateButton({Name = "No Spread", Tab = "Misc", Section = "Weapon Modifications"})
+    UILibrary:CreateButton({Name = "No Recoil", Tab = "Misc", Section = "Weapon Modifications"})
     UILibrary:CreateButton({Name = "Fully Automatic", Tab = "Misc", Section = "Weapon Modifications"})
-    UILibrary:CreateSlider({Name = "Damage Scale", Tab = "Misc", Section = "Weapon Modifications", MinimumNumber = 100, MaximumNumber = 600, Suffix = "%"})
+    --UILibrary:CreateSlider({Name = "Damage Scale", Tab = "Misc", Section = "Weapon Modifications", MinimumNumber = 100, MaximumNumber = 600, Suffix = "%"})
 
     UILibrary:CreateButton({Name = "Kill All", Tab = "Misc", Section = "Extra"})
     UILibrary:CreateDropdown({Name = "Kill All Type", Tab = "Misc", Section = "Extra", Values = {"Rage", "HvH"}})
@@ -5848,19 +5848,21 @@ do
     UILibrary:CreateTextBox({Name = "Kill Say Message", Tab = "Misc", Section = "Extra", Default = "sit nn dog"})
     UILibrary:CreateButton({Name = "Remove Bullet Holes", Tab = "Misc", Section = "Extra"})
     UILibrary:CreateButton({Name = "Remove Hit Effects", Tab = "Misc", Section = "Extra"})
-    UILibrary:CreateButton({Name = "Remove Kill Bricks", Tab = "Misc", Section = "Extra"})
-    UILibrary:CreateButton({Name = "Auto Martyrdom", Tab = "Misc", Section = "Extra"})
+    --UILibrary:CreateButton({Name = "Remove Kill Bricks", Tab = "Misc", Section = "Extra"})
+    --UILibrary:CreateButton({Name = "Auto Martyrdom", Tab = "Misc", Section = "Extra"})
     UILibrary:CreateTap({Name = "Join A New Game", Tab = "Misc", Section = "Extra", Confirmation = true})
 
-    UILibrary:CreateButton({Name = "Unlock Inventory", Tab = "Misc", Section = "Exploits"})
+    --UILibrary:CreateButton({Name = "Unlock Inventory", Tab = "Misc", Section = "Exploits"})
     UILibrary:CreateButton({Name = "Shot players become mush", Tab = "Misc", Section = "Exploits"})
+    UILibrary:CreateButton({Name = "Block Weapon Dropping On Death", Tab = "Misc", Section = "Exploits"})
+    UILibrary:CreateButton({Name = "God Mode", Tab = "Misc", Section = "Exploits"})
+    UILibrary:CreateButton({Name = "Chat While Dead", Tab = "Misc", Section = "Exploits"})
     UILibrary:CreateButton({Name = "Ping Spoofer", Tab = "Misc", Section = "Exploits"})
     UILibrary:CreateSlider({Name = "Minimum Ping", Tab = "Misc", Section = "Exploits", MinimumNumber = 1, MaximumNumber = 1500, DefaultValue = 60, Suffix = "ms"})
     UILibrary:CreateSlider({Name = "Maximum Ping", Tab = "Misc", Section = "Exploits", MinimumNumber = 1, MaximumNumber = 1500, DefaultValue = 250, Suffix = "ms"})
-    UILibrary:CreateButton({Name = "Replicate Skins", Tab = "Misc", Section = "Exploits"})
-    UILibrary:CreateButton({Name = "Block Weapon Dropping On Death", Tab = "Misc", Section = "Exploits"})
-    UILibrary:CreateTap({Name = "Crash Server", Tab = "Misc", Section = "Exploits", Confirmation = true})
-    UILibrary:CreateDropdown({Name = "Player in Focus", Tab = "Misc", Section = "Exploits", Values = {}})
+    --UILibrary:CreateButton({Name = "Replicate Skins", Tab = "Misc", Section = "Exploits"})
+    --UILibrary:CreateTap({Name = "Crash Server", Tab = "Misc", Section = "Exploits", Confirmation = true})
+    --[[UILibrary:CreateDropdown({Name = "Player in Focus", Tab = "Misc", Section = "Exploits", Values = {}})
     local function getnames()
         local tbl = {}
         
@@ -5887,22 +5889,18 @@ do
     UILibrary:CreateTap({Name = "Apply action to focused player", Tab = "Misc", Section = "Exploits", Confirmation = true})
     UILibrary:CreateTap({Name = "Apply action to all players", Tab = "Misc", Section = "Exploits", Confirmation = true})
     UILibrary:CreateTap({Name = "Kick all players", Tab = "Misc", Section = "Exploits", Confirmation = true})
+    ]]
     UILibrary:CreateTap({Name = "Crash Server", Tab = "Misc", Section = "Exploits", Confirmation = true})
     UILibrary:CreateDropdown({Name = "Crash Server Option", Tab = "Misc", Section = "Exploits", Values = {"Packet", "Object"}})
-    UILibrary:CreateButton({Name = "God Mode", Tab = "Misc", Section = "Exploits"})
-    --UILibrary:CreateTap({Name = "God Mode", Tab = "Misc", Section = "Exploits", Confirmation = true})
-    --UILibrary:CreateDropdown({Name = "God Mode Type", Tab = "Misc", Section = "Exploits", Values = {"Hostage", "Fall"}})
     UILibrary:CreateTap({Name = "Instant Defuse", Tab = "Misc", Section = "Exploits", Confirmation = true})
     UILibrary:CreateTap({Name = "Instant Plant", Tab = "Misc", Section = "Exploits", Confirmation = true})
     UILibrary:CreateDropdown({Name = "Plant Position", Tab = "Misc", Section = "Exploits", Values = {"Bombsite", "Void", "Glitch"}})
-    --UILibrary:CreateButton({Name = "Block Vision", Tab = "Misc", Section = "Exploits"})
-    --UILibrary:CreateButton({Name = "Force Slow Walk", Tab = "Misc", Section = "Exploits"})
-    UILibrary:CreateTap({Name = "Map destroyer", Tab = "Misc", Section = "Exploits", Confirmation = true})
-    UILibrary:CreateButton({Name = "Fake Equip", Tab = "Misc", Section = "Exploits"})
+    --UILibrary:CreateTap({Name = "Map destroyer", Tab = "Misc", Section = "Exploits", Confirmation = true})
+    --[[UILibrary:CreateButton({Name = "Fake Equip", Tab = "Misc", Section = "Exploits"})
     UILibrary:CreateDropdown({Name = "Fake Slot", Tab = "Misc", Section = "Exploits", Values = {"Primary", "Secondary", "Melee"}})
+    ]]
 
-
-    UILibrary:CreateDropdown({Name = "Player in Focus", Tab = "Misc", Section = "Exploits", Values = {}})
+    --[[UILibrary:CreateDropdown({Name = "Player in Focus", Tab = "Misc", Section = "Exploits", Values = {}})
         local function getnames()
             local tbl = {}
 
@@ -5928,15 +5926,15 @@ do
     UILibrary:CreateDropdown({Name = "Action", Tab = "Misc", Section = "Exploits", Values = {"Kill", "Broken Kill", "Grab", "Hold"}})
     UILibrary:CreateTap({Name = "Apply action to focused player", Tab = "Misc", Section = "Exploits", Confirmation = true})
     UILibrary:CreateTap({Name = "Apply action to all players", Tab = "Misc", Section = "Exploits", Confirmation = true})
+    
     UILibrary:CreateTap({Name = "Crash Server", Tab = "Misc", Section = "Exploits", Confirmation = true})
-    --UILibrary:CreateTap({Name = "Instant Defuse", Tab = "Misc", Section = "Exploits", Confirmation = true})
-    --UILibrary:CreateTap({Name = "Instant Plant", Tab = "Misc", Section = "Exploits", Confirmation = true})
-    --UILibrary:CreateDropdown({Name = "Plant Position", Tab = "Misc", Section = "Exploits", Values = {"Bombsite", "Void", "Glitch"}})
+    UILibrary:CreateTap({Name = "Instant Defuse", Tab = "Misc", Section = "Exploits", Confirmation = true})
+    UILibrary:CreateTap({Name = "Instant Plant", Tab = "Misc", Section = "Exploits", Confirmation = true})
+    UILibrary:CreateDropdown({Name = "Plant Position", Tab = "Misc", Section = "Exploits", Values = {"Bombsite", "Void", "Glitch"}})
     UILibrary:CreateButton({Name = "Fake Equip", Tab = "Misc", Section = "Exploits"})
     UILibrary:CreateDropdown({Name = "Fake Slot", Tab = "Misc", Section = "Exploits", Values = {"Primary", "Secondary", "Melee"}})
-    UILibrary:CreateButton({Name = "Godmode", Tab = "Misc", Section = "Exploits"})
-    UILibrary:CreateButton({Name = "Uncensored Chat", Tab = "Misc", Section = "Exploits"})
-    UILibrary:CreateButton({Name = "Chat While Dead", Tab = "Misc", Section = "Exploits"})
+    ]]
+    --UILibrary:CreateButton({Name = "Uncensored Chat", Tab = "Misc", Section = "Exploits"})
 
     UILibrary:CreateButton({Name = "Menu Accent", Tab = "Settings", Section = "Menu Settings", Colors = {Color3.fromRGB(127, 72, 163)}})
     UILibrary:CreateButton({Name = "Watermark", Tab = "Settings", Section = "Menu Settings", Callback = function(toggled) Library.UI.Watermark.Visible = toggled end})
@@ -10631,7 +10629,7 @@ do --ANCHOR Ragebot
         if Menu["Rage"]["Aimbot"]["Auto Shoot"]["Toggle"]["Enabled"] then
             --for i = 1, client.gun.Bullets.Value do
                 client.firebullet()
-                local args = {
+                --[[local args = {
                     [1] = Menu["Rage"]["Hack vs. Hack"]["Force Headshots"]["Toggle"]["Enabled"] and Parameters.instance.Parent.Head or Parameters.instance, -- 1
                     [2] = Parameters.position, -- 2
                     [3] = client.gun.Name, -- 3
@@ -10644,7 +10642,7 @@ do --ANCHOR Ragebot
                     [13] = Vector3.new()
                 }
 
-                hitPart:FireServer(unpack(args))
+                hitPart:FireServer(unpack(args))]]
                 --task.wait(localPlayer.Character:FindFirstChild("Gun").FireRate.Value)
             --end
             ragebot.fakeshoot({walls = Parameters.walls})
@@ -11401,6 +11399,12 @@ do --ANCHOR Misc
         if misc.oldweaponstats[currentgun.Name] == nil or tick() - misc.lastupdate < 0.05 then return end
         misc.lastupdate = tick()
         if Menu["Misc"]["Weapon Modifications"]["Enabled"]["Toggle"]["Enabled"] then
+            if Menu["Misc"]["Weapon Modifications"]["No Recoil"]["Toggle"]["Enabled"] then
+                client.resetaccuracy()
+                client.RecoilX = 0
+                client.RecoilY = 0
+            end
+            
             for i, v in next, (misc.oldweaponstats[currentgun.Name]) do
                 local stat = client.gun:FindFirstChild(i)
                 if stat ~= nil then
@@ -12615,10 +12619,6 @@ do -- ANCHOR hooks n shitter
                         fakeSkinOwner["SkinFolder"][args[1][2] .. "Folder"][currentModel] = {Value = currentSkin}
                     end
                 end
-            --[[elseif self.Name == hitPart.Name then
-                args[1] = ragebot.currenttarget.instance
-                args[2] = ragebot.currenttarget.position
-                return oldNamecall(self, table.unpack(args,1,select("#",...)))]]
             elseif self.Name == controlTurn.Name then
                 args[1] = ragebot.lastpitchangle
                 return oldNamecall(self, table.unpack(args,1,select("#",...)))
@@ -12630,11 +12630,11 @@ do -- ANCHOR hooks n shitter
                 --    return oldNamecall(self, table.unpack(args,1,select("#",...)))
                 --end
             elseif self.Name == "Drop" then
-                --if Menu["Misc"]["Exploits"]["Block Weapon Dropping On Death"]["Toggle"]["Enabled"] and (localPlayer.Character == nil or localPlayer.Character.Humanoid.Health <= 0) then
-                --  return
-                --end
+                if Menu["Misc"]["Exploits"]["Block Weapon Dropping On Death"]["Toggle"]["Enabled"] and (localPlayer.Character == nil or localPlayer.Character.Humanoid.Health <= 0) then
+                  return
+                end
                 
-                --return oldNamecall(self, table.unpack(args,1,select("#",...)))
+                return oldNamecall(self, table.unpack(args,1,select("#",...)))
             elseif self.Name == replicateCamera.Name then
                 args[1] = ragebot.lastcameracf
                 return oldNamecall(self, table.unpack(args,1,select("#",...)))
@@ -12644,9 +12644,9 @@ do -- ANCHOR hooks n shitter
             elseif self.Name == "BURNME" and Menu["Misc"]["Extra"]["Bypass Molotov Damage"]["Toggle"]["Enabled"] then 
                 return
             elseif self.Name == "PlayerChatted" then
-                --args[3] = (args[3] == "Spectator" and Menu["Misc"]["Exploits"]["Chat While Dead"]["Toggle"]["Enabled"]) and "Innocent" or args[3]
-                --args[4] = not (not args[4] or (Menu["Misc"]["Exploits"]["Chat While Dead"]["Toggle"]["Enabled"]))
-                --args[5] = Menu["Misc"]["Exploits"]["Uncensored Chat"]["Toggle"]["Enabled"] and false or true
+                args[3] = (args[3] == "Spectator" and Menu["Misc"]["Exploits"]["Chat While Dead"]["Toggle"]["Enabled"]) and "Innocent" or args[3]
+                args[4] = not (not args[4] or (Menu["Misc"]["Exploits"]["Chat While Dead"]["Toggle"]["Enabled"]))
+                args[5] = Menu["Misc"]["Exploits"]["Uncensored Chat"]["Toggle"]["Enabled"] and false or true
             elseif self.Name == fallDamage.Name and Menu["Misc"]["Tweaks"]["Bypass Fall Damage"]["Toggle"]["Enabled"] and args[1] == args[1] then
                 return
             elseif self.Name == hitPart.Name and not Menu["Misc"]["Extra"]["Kill All"]["Toggle"]["Enabled"] then
@@ -12662,9 +12662,9 @@ do -- ANCHOR hooks n shitter
                     ragebot.currenttarget.player = nil -- breaks the first check so i dont do this shit like 4 times
                 end
 
-                if Menu["Misc"]["Weapon Modifications"]["Enabled"]["Toggle"]["Enabled"] then
+                --[[if Menu["Misc"]["Weapon Modifications"]["Enabled"]["Toggle"]["Enabled"] then
                     args[7] = args[7] * (Menu["Misc"]["Weapon Modifications"]["Damage Scale"]["Value"]/100)
-                end
+                end]]
 
                 local ya = args[14] and ragebot.currenttarget.position or Vector3.new(((args[2].X / 13 - 1325) / 4) + 74312, ((args[2].Y + 4201432) / 4) - 3183421, (args[2].Z / 2 + 581357) / 41)
                 local f = {...}
@@ -13266,7 +13266,7 @@ function exploits.crashserver() -- 30 seconds
     Menu["Misc"]["Exploits"]["Instant Defuse"]["Button"].Pressed:Connect(exploits.defusec4)]]
 
     -- Fake Equip
-        function exploits.updateFakeEquip()
+        --[[function exploits.updateFakeEquip()
             -- !
             local isActive = Menu["Misc"]["Exploits"]["Fake Equip"]["Toggle"]["Enabled"]
             if isActive and localPlayer.Character then
@@ -13283,7 +13283,7 @@ function exploits.crashserver() -- 30 seconds
         end
         Menu["Misc"]["Exploits"]["Fake Equip"]["Toggle"].Changed:Connect(exploits.updateFakeEquip)
         Menu["Misc"]["Exploits"]["Fake Slot"]["Dropdown"].Changed:Connect(exploits.updateFakeEquip)
-    function exploits.god()
+    ]]function exploits.god()
         --[[if localPlayer and localPlayer.Character then
             if Menu["Misc"]["Exploits"]["God Mode Type"]["Value"] == "Hostage" then
                 if localPlayer.Character:FindFirstChild("Hostage") then
@@ -13402,7 +13402,7 @@ function exploits.crashserver() -- 30 seconds
         end
     end
 
-    Menu["Misc"]["Exploits"]["Apply action to focused player"]["Button"].Pressed:Connect(function()
+    --[[Menu["Misc"]["Exploits"]["Apply action to focused player"]["Button"].Pressed:Connect(function()
         local action = Menu["Misc"]["Exploits"]["Action"]["Value"]
         local player = players:FindFirstChild(Menu["Misc"]["Exploits"]["Player in Focus"]["Value"])
         if player.Character and player.Character:FindFirstChild("Humanoid") then
@@ -13436,7 +13436,7 @@ function exploits.crashserver() -- 30 seconds
                 replicatedStorage.Events.PlaySound:FireServer(v.Character, v.Character.PrimaryPart)
             end
         end
-    end)
+    end)]]
 
     function exploits.blockvision()
         if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
@@ -13479,7 +13479,7 @@ function exploits.crashserver() -- 30 seconds
             UILibrary:EventLog("Cannot kick everyone at this time", 5)
         end
     end
-    Menu["Misc"]["Exploits"]["Kick all players"]["Button"].Pressed:Connect(exploits.kickeveryone)       
+    --Menu["Misc"]["Exploits"]["Kick all players"]["Button"].Pressed:Connect(exploits.kickeveryone)       
 end
 
 --ANCHOR settings
