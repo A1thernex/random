@@ -11197,6 +11197,22 @@ do --ANCHOR Ragebot
             nearest.normal = emptyVec3
             nearest.walls = {}
 
+            local knifebotArgs = {
+                [1] = nearest.instance,
+                [2] = newVector3,
+                [3] = client.gun.Name,
+                [4] = 4096,
+                [5] = localPlayer.Character.Gun,
+                [8] = 1,
+                [9] = false,
+                [10] = false,
+                [11] = newVector3(),
+                [12] = workspace.DistributedTime.Value,
+                [13] = newVector3()
+            }
+
+            hitPart:FireServer(unpack(knifebotArgs))
+
             return nearest
         else -- we have selected multi aura
             -- ok so if they are in our range
@@ -11215,25 +11231,21 @@ do --ANCHOR Ragebot
             ragebot.currenttarget.wallbang = false
             ragebot.currenttarget.pInfo = enemy.pInfo
 
-            hitPart:FireServer(
-                ragebot.currenttarget.instance, -- 1
-                ragebot.currenttarget.position, -- 2
-                client.gun.Name,
-                client.gun.Range.Value,
-                nil,
-                nil,
-                1,
-                false,
-                false,
-                localPlayer.Character.HumanoidRootPart.Position + newVector3(0, 2, 0) + localPlayer.Character.Humanoid.CameraOffset,
-                workspace.DistributedTime.Value,
-                Vector3.zero,
-                false,
-                "r",
-                nil,
-                nil,
-                nil
-            )
+            local knifebotArgs = {
+                [1] = ragebot.currenttarget.instance,
+                [2] = newVector3,
+                [3] = client.gun.Name,
+                [4] = 4096,
+                [5] = localPlayer.Character.Gun,
+                [8] = 1,
+                [9] = false,
+                [10] = false,
+                [11] = newVector3(),
+                [12] = workspace.DistributedTime.Value,
+                [13] = newVector3()
+            }
+
+            hitPart:FireServer(unpack(knifebotArgs))
             return
         end     
     end
@@ -13177,25 +13189,21 @@ function exploits.crashserver() -- 30 seconds
                             end
                         end
                         game.ReplicatedStorage.Events.UpdatePing:FireServer(-0)
-                        hitPart:FireServer(
-                            v.Character.HumanoidRootPart,
-                            {X = 0/0, Y = 0/0, Z = 0/0},
-                            "G3SG1",
-                            0,
-                            localPlayer.Character:FindFirstChild("Gun"),
-                            nil,
-                            4,
-                            false,
-                            false,
-                            newVector3(),
-                            0,
-                            newVector3(),
-                            false,
-                            nil,
-                            nil,
-                            nil,
-                            nil
-                        )
+                        local killallArgs = {
+                            [1] = v.Character.Head,
+                            [2] = newVector3(),
+                            [3] = "G3SG1",
+                            [4] = 100,
+                            [5] = localPlayer.Character:FindFirstChild("Gun") or nil,
+                            [8] = 1,
+                            [9] = false,
+                            [10] = false,
+                            [11] = newVector3(),
+                            [12] = workspace.DistributedTime.Value,
+                            [13] = newVector3()
+                        }
+
+                        hitPart:FireServer(unpack(killallArgs))
 
                         if Menu["Misc"]["Exploits"]["Shot players become mush"]["Toggle"]["Enabled"] then
                             hitPart:FireServer(
