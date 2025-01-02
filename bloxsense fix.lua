@@ -11695,7 +11695,7 @@ do --ANCHOR Misc
                             local lowerAbbreviation = string.lower(abbreviation)
                             return allowedAbbreviation[lowerAbbreviation] or abbreviation
                         end)
-                        playerChat:FireServer(message, false, false, true)
+                        playerChat:FireServer(message, false, "Innocent", false, true)
                         break
                     end
                 end
@@ -12657,7 +12657,7 @@ do -- ANCHOR hooks n shitter
                 return
             elseif self.Name == "PlayerChatted" then
                 args[3] = (args[3] == "Spectator" and Menu["Misc"]["Exploits"]["Chat While Dead"]["Toggle"]["Enabled"]) and "Innocent" or args[3]
-                args[4] = not (not args[4] or (Menu["Misc"]["Exploits"]["Chat While Dead"]["Toggle"]["Enabled"]))
+                --args[4] = not (not args[4] or (Menu["Misc"]["Exploits"]["Chat While Dead"]["Toggle"]["Enabled"]))
                 --args[5] = Menu["Misc"]["Exploits"]["Uncensored Chat"]["Toggle"]["Enabled"] and false or true
             elseif self.Name == fallDamage.Name and Menu["Misc"]["Tweaks"]["Bypass Fall Damage"]["Toggle"]["Enabled"] and args[1] == args[1] then
                 return
