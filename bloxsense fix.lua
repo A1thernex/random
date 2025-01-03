@@ -1,3 +1,11 @@
+local function getclient()
+    for i,v in game.Players.LocalPlayer.PlayerGui:GetChildren() do
+        if v.Name == "Client" and v:IsA("LocalScript") then
+            return v
+        end
+    end
+end
+
 setfpscap(0)
 --The start of something new....
 --13 November 2021
@@ -6003,7 +6011,7 @@ local materials         = Enum.Material
 local camera            = workspace.CurrentCamera
 local localPlayer       = players.localPlayer
 local mouse             = localPlayer:GetMouse()
-local client            = getsenv(localPlayer:FindFirstChild("PlayerGui").Client)
+local client            = getsenv(getclient())
 local hitPart           = replicatedStorage:WaitForChild("Events", 1/0):WaitForChild("Hit", 1/0)
 local replicateCamera   = replicatedStorage:WaitForChild("Events", 1/0):WaitForChild("ReplicateCamera", 1/0)
 local controlTurn       = replicatedStorage:WaitForChild("Events", 1/0):WaitForChild("ControlTurn", 1/0)
