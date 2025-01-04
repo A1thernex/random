@@ -1,5 +1,3 @@
-getgenv().Hack = nil
-
 local function findremote()
     for i,v in game.ReplicatedStorage.Events:GetChildren() do
         if string.find(v.Name, "-") then
@@ -8608,7 +8606,7 @@ do --ANCHOR Visuals
                             v.Transparency = localPlayer.Character:FindFirstChild("AIMING") and 0.75 or 0
                         end
                     end
-                    if v:IsA("Accessory") then
+                    if v:IsA("Accessory") and v:FindFirstChild("Handle") then
                         v.Handle.Transparency = localPlayer.Character:FindFirstChild("AIMING") and 0.75 or 0
                     end
                 end
@@ -11272,8 +11270,8 @@ do --ANCHOR Ragebot
             return -- we cannot shoot at all at this time
         end
         
-        local gun = replicatedStorage.Weapons:FindFirstChild(client.gun.Name);
-        if tick() - ragebot.lastshot < gun.FireRate.Value or tick() - ragebot.lastreload < gun.ReloadTime.Value then
+        --local gun = replicatedStorage.Weapons:FindFirstChild(client.gun.Name);
+        if tick() - ragebot.lastshot < client.gun.FireRate--[[.Value]] or tick() - ragebot.lastreload < client.gun.ReloadTime--[[.Value]] then
             return -- firerate restrikkt
         end
         
@@ -11431,28 +11429,28 @@ do --ANCHOR Misc
             for i,v in client.gun do
                 if i == "FireRate" then
                     client.gun[i] = Menu["Misc"]["Weapon Modifications"]["Fire Rate Scale"]["Value"] == 1200 and 0 or v / (Menu["Misc"]["Weapon Modifications"]["Fire Rate Scale"]["Value"]/100)
-                else
-                    client.gun[i] = v
+                --[[else
+                    client.gun[i] = v]]
                 end
                 if i == "EquipTime" then
                     if Menu["Misc"]["Weapon Modifications"]["Instant Equip"]["Toggle"]["Enabled"] then
                         client.gun[i] = 0.00001
-                    else
-                        client.gun[i] = v
+                    --[[else
+                        client.gun[i] = v]]
                     end
                 end
                 if i == "ReloadTime" then
                     if Menu["Misc"]["Weapon Modifications"]["Instant Reload"]["Toggle"]["Enabled"] then
                         client.gun[i] = 0.00001
-                    else
-                        client.gun[i] = v
+                    --[[else
+                        client.gun[i] = v]]
                     end
                 end
                 if i == "Auto" then
                     if Menu["Misc"]["Weapon Modifications"]["Fully Automatic"]["Toggle"]["Enabled"] then
                         client.gun[i] = true
-                    else
-                        client.gun[i] = v
+                    --[[else
+                        client.gun[i] = v]]
                     end
                 end
             end
