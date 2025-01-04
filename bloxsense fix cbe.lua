@@ -1,3 +1,5 @@
+getgenv().Hack = nil
+
 local function findremote()
     for i,v in game.ReplicatedStorage.Events:GetChildren() do
         if string.find(v.Name, "-") then
@@ -10141,8 +10143,6 @@ do --ANCHOR Ragebot
         repeat task.wait() until localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") and localPlayer.Character.Humanoid.Health > 0
         task.wait(2)
         if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
-            -- mfw
-            localPlayer.Character.jumpcd.Enabled = false
             ragebot.setupfakehrp(localPlayer.Character)
             if Menu["Misc"]["Extra"]["Auto Buy Bot"]["Toggle"]["Enabled"] then
                 ragebot.setweapons()
@@ -10577,7 +10577,7 @@ do --ANCHOR Ragebot
     --      currentammo = ammoSecondary - 1;
         --  debug.setupvalue(client.reloadwep, 10, currentammo);
         --end
-        if currentammo == 0 and client.gun:FindFirstChild("Melee") == nil then
+        if currentammo == 0 and not client.gun.Melee then
             ragebot.lastreload = tick()
             ragebot.currenttarget = {
                 player = nil,
@@ -11091,16 +11091,16 @@ do --ANCHOR Ragebot
         -- kevlar
         local haskevlar = findFirstChild(plr, "Kevlar")
         local hashelmet = haskevlar and findFirstChild(plr, "Helmet")
-        local armorpiercing = gun.ArmorPenetration.Value
+        local armorpiercing = gun.ArmorPenetration--[[.Value]]
 
         -- damage drop off at range
-        local rangemodifier = gun.RangeModifier.Value
+        local rangemodifier = gun.RangeModifier--[[.Value]]
 
-        local weapondamage = gun.DMG.Value
-        local pellets = gun.Bullets.Value
+        local weapondamage = gun.DMG--[[.Value]]
+        local pellets = gun.Bullets--[[.Value]]
         local forcedHead = Menu["Rage"]["Hack vs. Hack"]["Force Headshots"]["Toggle"]["Enabled"]
         local weaponstat = { -- this one is just for the autowall
-            maxPenetration = gun.Penetration.Value * 0.01, -- the equivalent of no penetration if the autowall is disabled
+            maxPenetration = gun.Penetration--[[.Value]] * 0.01, -- the equivalent of no penetration if the autowall is disabled
             maxWalls = (Menu["Rage"]["Aimbot"]["Auto Wall"]["Toggle"]["Enabled"] == false) and 0 or 4, -- if our autowall isnt enabled then just simulate one wall, itll fail anyway
         }
 
@@ -11312,7 +11312,7 @@ do --ANCHOR Ragebot
         if #enemies < 1 then return end -- no enemies
 
         local result
-        if gun:FindFirstChild("Melee") and Menu["Rage"]["Aimbot"]["Knife Bot"]["Toggle"]["Enabled"] then -- okay so we're holding our knifebot so we need to use our knifebot
+        if client.gun.Melee and Menu["Rage"]["Aimbot"]["Knife Bot"]["Toggle"]["Enabled"] then -- okay so we're holding our knifebot so we need to use our knifebot
             result = ragebot.knifebot()
         else -- okay no knife, ragebot.scan!!
             ragebot.currentindex = ragebot.currentindex + 1 -- okay lets move to the next idx in the enemies table (scan the next enemy)
@@ -11323,8 +11323,6 @@ do --ANCHOR Ragebot
         end
 
         if not result then return end -- couldnt hit
-        
-        warn("result is existent!!!")
 
         ragebot.currenttarget.player = result.player
         ragebot.currenttarget.instance = result.instance
@@ -11334,7 +11332,7 @@ do --ANCHOR Ragebot
         ragebot.currenttarget.origin = result.from[1]
         ragebot.currenttarget.pInfo = result.pInfo
 
-        if not gun:FindFirstChild("Melee") and (result.damage < result.pInfo.humanoid.health or Menu["Rage"]["Aimbot"]["Auto Shoot"]["Toggle"]["Enabled"] == false) then
+        if not client.gun.Melee and (result.damage < result.pInfo.humanoid.health or Menu["Rage"]["Aimbot"]["Auto Shoot"]["Toggle"]["Enabled"] == false) then
             ragebot.currentindex = ragebot.currentindex - 1 -- rescan this person as we did not deliver a lethal hit
         end
 
@@ -11420,12 +11418,14 @@ do --ANCHOR Misc
         if tick() - misc.lastupdate < 0.05 then return end
         misc.lastupdate = tick()
         if Menu["Misc"]["Weapon Modifications"]["Enabled"]["Toggle"]["Enabled"] then
+            setreadonly(client.gun, false)
+            
             if Menu["Misc"]["Weapon Modifications"]["No Recoil"]["Toggle"]["Enabled"] then
                 client.resetaccuracy()
                 client.RecoilX = 0
                 client.RecoilY = 0
             end
-            
+
             for i,v in client.gun do
                 if i == "FireRate" then
                     client.gun[i] = Menu["Misc"]["Weapon Modifications"]["Fire Rate Scale"]["Value"] == 1200 and 0 or v / (Menu["Misc"]["Weapon Modifications"]["Fire Rate Scale"]["Value"]/100)
@@ -11503,6 +11503,7 @@ do --ANCHOR Misc
                 client.reloadtime = 0
             end
         else
+            setreadonly(client.gun, true)
             --[[for i, v in next, (misc.oldweaponstats[currentgun.Name]) do
                 local stat = client.gun:FindFirstChild(i)
                 if stat ~= nil and (stat:IsA("NumberValue") or stat:IsA("IntValue") or stat:IsA("BoolValue")) then
