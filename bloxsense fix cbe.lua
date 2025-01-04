@@ -1,5 +1,3 @@
-getgenv().Hack = nil
-
 local function findremote()
     for i,v in game.ReplicatedStorage.Events:GetChildren() do
         if string.find(v.Name, "-") then
