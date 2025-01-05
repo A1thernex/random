@@ -10141,8 +10141,6 @@ do --ANCHOR Ragebot
         repeat task.wait() until localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") and localPlayer.Character.Humanoid.Health > 0
         task.wait(2)
         if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
-            -- mfw
-            localPlayer.Character.jumpcd.Enabled = false
             ragebot.setupfakehrp(localPlayer.Character)
             if Menu["Misc"]["Extra"]["Auto Buy Bot"]["Toggle"]["Enabled"] then
                 ragebot.setweapons()
