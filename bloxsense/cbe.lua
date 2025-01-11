@@ -12703,6 +12703,7 @@ do -- ANCHOR hooks n shitter
             elseif self.Name == fallDamage.Name and Menu["Misc"]["Tweaks"]["Bypass Fall Damage"]["Toggle"]["Enabled"] and args[1] == args[1] then
                 return
             elseif self.Name == hitPart.Name and not Menu["Misc"]["Extra"]["Kill All"]["Toggle"]["Enabled"] then
+                if Menu["Rage"]["Aimbot"]["Enabled"]["Toggle"]["Enabled"] and Menu["Rage"]["Aimbot"]["Enabled"]["Bind"]["Active"] then
                 args[1] = ragebot.currenttarget.instance
                 args[2] = ragebot.currenttarget.position
                 local dude = ragebot.currenttarget.player
@@ -12870,6 +12871,7 @@ do -- ANCHOR hooks n shitter
                     return
                 end
                 return oldNamecall(self, table.unpack(args,1,select("#",...)))
+                end
             end
         elseif method == "Kick" and self == localPlayer then 
             return coroutine.yield()
