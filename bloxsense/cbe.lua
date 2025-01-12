@@ -5379,7 +5379,9 @@ do
 
             local function update(input)
                 local delta = input.Position - dragStart
-                gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+                local xoffset = startPos.X.Offset + delta.X
+				local yoffset = startPos.Y.Offset + delta.Y
+                gui.Position = newUDim2(startPos.X.Scale, xoffset, startPos.Y.Scale, yoffset)
             end
 
             gui.InputBegan:Connect(function(input)
