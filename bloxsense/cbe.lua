@@ -8684,7 +8684,7 @@ do --ANCHOR Visuals
             local crosshairTrans = Menu["Visuals"]["Crosshair"]["Custom Crosshair"]["Color 1"]["Transparency"]
             local crosshairThickness = Menu["Visuals"]["Crosshair"]["Crosshair Thickness"].Value
             local crosshairOutline = false -- not enough space for toggle :(
-            for _, frame in next, localPlayer.PlayerGui.GUI.Crosshairs.Crosshair:GetChildren() do
+            for _, frame in next, localPlayer.PlayerGui["EEED-GUI"].Crosshairs.Crosshair:GetChildren() do
                 if frame:IsA("ImageLabel") then 
                 else
                     frame.BackgroundTransparency = 1
@@ -8695,7 +8695,7 @@ do --ANCHOR Visuals
                 v.Visible = customCrosshair
                 v.Color = crosshairColor
                 v.Thickness = crosshairThickness
-                v.Transparency = localPlayer.PlayerGui.GUI.Crosshairs.Scope.Visible and 0 or 1 - crosshairTrans
+                v.Transparency = localPlayer.PlayerGui["EEED-GUI"].Crosshairs.Scope.Visible and 0 or 1 - crosshairTrans
                 visuals.crosshair.drawingObjects.outlines[i].Visible = v.Visible and crosshairOutline or false
                 visuals.crosshair.drawingObjects.outlines[i].Thickness = v.Thickness + 2
             end
@@ -8756,7 +8756,7 @@ do --ANCHOR Visuals
 
     Menu["Visuals"]["Crosshair"]["Custom Crosshair"]["Toggle"].Changed:Connect(function()
         if not Menu["Visuals"]["Crosshair"]["Custom Crosshair"]["Toggle"]["Enabled"] and not (Menu["Visuals"]["Camera"]["Third Person"]["Toggle"]["Enabled"] and Menu["Visuals"]["Camera"]["Third Person"]["Bind"]["Active"]) then
-            for _, frame in next, localPlayer.PlayerGui.GUI.Crosshairs.Crosshair:GetChildren() do
+            for _, frame in next, localPlayer.PlayerGui["EEED-GUI"].Crosshairs.Crosshair:GetChildren() do
                 if frame:IsA("ImageLabel") then else frame.BackgroundTransparency = 0 end
             end
         end
