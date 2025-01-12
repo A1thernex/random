@@ -6,6 +6,8 @@ local function findremote()
     end
 end
 
+local newUDim2 = UDim2.new
+
 setfpscap(0)
 --The start of something new....
 --13 November 2021
