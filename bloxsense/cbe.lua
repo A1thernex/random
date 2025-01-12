@@ -5839,11 +5839,10 @@ do
     UILibrary:CreateButton({Name = "Bypass Molotov Damage", Tab = "Misc", Section = "Extra"})
     UILibrary:CreateButton({Name = "Auto Buy Bot", Tab = "Misc", Section = "Extra"})
     local allweapons = {}
-    if game:GetService("ReplicatedStorage"):FindFirstChild("Weapons") then
-        for i, v in next, (game:GetService("ReplicatedStorage").Weapons:GetChildren()) do
-            if (v:FindFirstChild("Primary") or v:FindFirstChild("Secondary")) and not v:FindFirstChild("Melee") then
-                allweapons[1 + #allweapons] = v.Name
-            end
+    for i, v in next, (game:GetService("ReplicatedStorage").Modules.WeaponData.Assets:GetChildren()) do
+        v = require(v).GetData()
+		if (v.Primary or v.Secondary) and not v.Melee then
+            allweapons[1 + #allweapons] = v.Name
         end
     end
     UILibrary:CreateDropdown({Name = "Buy Bot Primary", Tab = "Misc", Section = "Extra", Values = allweapons})
