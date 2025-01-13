@@ -5839,10 +5839,14 @@ do
     UILibrary:CreateButton({Name = "Bypass Molotov Damage", Tab = "Misc", Section = "Extra"})
     UILibrary:CreateButton({Name = "Auto Buy Bot", Tab = "Misc", Section = "Extra"})
     local allweapons = {}
+    local allweapons2 = {}
     for i, v in next, (game:GetService("ReplicatedStorage").Modules.WeaponData.Assets:GetChildren()) do
         v = require(v).GetData()
 		if (v.Primary or v.Secondary) and not v.Melee then
             allweapons[1 + #allweapons] = v.Name
+        elseif v.Melee then
+            allweapons2 = allweapons
+            table.insert(allweapons2, v.Name)
         end
     end
     UILibrary:CreateDropdown({Name = "Buy Bot Primary", Tab = "Misc", Section = "Extra", Values = allweapons})
@@ -5906,6 +5910,9 @@ do
     UILibrary:CreateTap({Name = "Instant Defuse", Tab = "Misc", Section = "Exploits", Confirmation = true})
     UILibrary:CreateTap({Name = "Instant Plant", Tab = "Misc", Section = "Exploits", Confirmation = true})
     UILibrary:CreateDropdown({Name = "Plant Position", Tab = "Misc", Section = "Exploits", Values = {"Bombsite", "Void", "Glitch"}})
+    UILibrary:CreateTap({Name = "Spawn Weapon", Tab = "Misc", Section = "Exploits"})
+    UILibrary:CreateDropdown({Name = "Weapon", Tab = "Misc", Section = "Exploits", Values = allweapons2})
+    UILibrary:CreateButton({Name = "Loop Spawn Weapon", Tab = "Misc", Section = "Exploits"})
     --UILibrary:CreateTap({Name = "Map destroyer", Tab = "Misc", Section = "Exploits", Confirmation = true})
     --[[UILibrary:CreateButton({Name = "Fake Equip", Tab = "Misc", Section = "Exploits"})
     UILibrary:CreateDropdown({Name = "Fake Slot", Tab = "Misc", Section = "Exploits", Values = {"Primary", "Secondary", "Melee"}})
@@ -13296,7 +13303,79 @@ function exploits.crashserver() -- 30 seconds
             UILibrary:EventLog("Cannot plant at this time", 5)
         end
     end
+
+    function exploits.spawnweapon()
+        local weapon = Menu["Misc"]["Exploits"]["Weapon"]["Value"]
+
+        if localPlayer.Status.Alive.Value then
+            local args = {
+                [1] = {
+                    ["MinDmg"] = 0,
+                    ["Animations"] = game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("WeaponData"):WaitForChild("Assets"):WaitForChild(weapon):WaitForChild("Configuration"),
+                    ["Bullets"] = 1,
+                    ["Range"] = 4096,
+                    ["FireRate"] = 0.12,
+                    ["CanDrop"] = true,
+                    ["DMG"] = 38,
+                    ["Penetration"] = 100,
+                    ["Gun"] = game:GetService("ReplicatedStorage"):WaitForChild("Modules"):WaitForChild("WeaponData"):WaitForChild("Assets"):WaitForChild(weapon):WaitForChild("Gun"),
+                    ["Spread"] = {
+                        ["Move"] = 12,
+                        ["Crouch"] = 6.83,
+                        ["Stand"] = 9.1,
+                        ["MaxInaccuracy"] = 0,
+                        ["Land"] = 19,
+                        ["Value"] = 2,
+                        ["Jump"] = 92.96,
+                        ["Ladder"] = 138,
+                        ["RecoveryTime"] = {
+                            ["Value"] = 0.345,
+                            ["Crouched"] = 0.287
+                        }
+                    },
+                    ["ArmorPenetration"] = 64,
+                    ["Primary"] = true,
+                    ["Auto"] = false,
+                    ["AccuracyDivisor"] = -1,
+                    ["Tagging"] = 0.44,
+                    ["PointsAward"] = 12,
+                    ["RangeModifier"] = 90,
+                    ["EquipTime"] = 1,
+                    ["KillAward"] = 150,
+                    ["StoredAmmo"] = 26,
+                    ["Name"] = weapon,
+                    ["Ammo"] = 13,
+                    ["ReloadTime"] = 2.27,
+                    ["AccuracyOffset"] = 0,
+                    ["Recoil"] = {
+                        ["Value"] = 26,
+                        ["X"] = 10,
+                        ["Y"] = 3
+                    },
+                    ["BulletPerTrail"] = 1
+                },
+                [2] = localPlayer.Character.HumanoidRootPart.CFrame,
+                [3] = 13,
+                [4] = 26,
+                [5] = false,
+                [7] = true,
+                [8] = false
+            }
+            
+            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Drop"):FireServer(unpack(args))
+        else
+            UILibrary:EventLog("Cannot spawn at this time", 5)
+        end
+    end
     Menu["Misc"]["Exploits"]["Instant Plant"]["Button"].Pressed:Connect(exploits.plantc4)
+    Menu["Misc"]["Exploits"]["Spawn Weapon"]["Button"].Pressed:Connect(exploits.spawnweapon)
+
+    runService.Stepped:Connect(function()
+        if Menu["Misc"]["Exploits"]["Loop Spawn Weapon"]["Toggle"]["Enabled"] then
+            exploits.spawnweapon()
+            task.wait(0.01)
+        end
+    end)
 
     --[[function exploits.defusec4()
         if workspace.Map.Gamemode.Value == "defusal" and workspace:FindFirstChild("C4") and localPlayer.Status.Alive.Value and (workspace.C4.Handle.CFrame.p - localPlayer.Character.HumanoidRootPart.Position).Magnitude < 290 then 
@@ -13376,7 +13455,7 @@ function exploits.crashserver() -- 30 seconds
             UILibrary:EventLog("You are not alive", 5)
         end]]
     end
-    Menu["Misc"]["Exploits"]["God Mode"]["Toggle"].Changed:Connect(function()
+    --Menu["Misc"]["Exploits"]["God Mode"]["Toggle"].Changed:Connect(function()
         runService.RenderStepped:Connect(function()
             if Menu["Misc"]["Exploits"]["God Mode"]["Toggle"]["Enabled"] then
                 for _, plr in players:GetPlayers() do
@@ -13386,7 +13465,7 @@ function exploits.crashserver() -- 30 seconds
                 end
             end
         end)
-    end)
+    --end)
 
     function exploits.cloneInstance(original: Instance): boolean
         -- Check if we can do it
