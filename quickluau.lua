@@ -37,7 +37,8 @@ local scripts = {
 	["iy"] = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source",
 	["dex"] = "https://raw.githubusercontent.com/infyiff/backup/main/dex.lua",
 	["esp"] = "https://raw.githubusercontent.com/ic3w0lf22/Unnamed-ESP/master/UnnamedESP.lua",
-	["nameless"] = "https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/Source.lua"
+	["nameless"] = "https://raw.githubusercontent.com/ltseverydayyou/Nameless-Admin/main/Source.lua",
+	["ss"] = "https://raw.githubusercontent.com/78n/SimpleSpy/refs/heads/main/SimpleSpySource.lua"
 }
 
 makeFunction({"isalive", "alive", "isAlive", "IsAlive", "Alive"}, function(plr: Player)
