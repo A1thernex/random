@@ -8645,7 +8645,7 @@ do --ANCHOR Visuals
     end)
 
     function visuals.updateScope(bool)
-        for i, v in next, (localPlayer.PlayerGui.GUI.Crosshairs:GetChildren()) do
+        for i, v in next, (localPlayer.PlayerGui["EEED-GUI"].Crosshairs:GetChildren()) do
             if v.Name:match("Frame") then
                 v.BackgroundTransparency = bool and 1 or 0
             elseif v.Name:match("Scope") then
