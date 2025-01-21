@@ -2,7 +2,6 @@ local githublink = "https://raw.githubusercontent.com/A1thernex/random/refs/head
 
 local games = {
     ["18976527873"] = "cbe.lua",
-    ["17586052747"] = "cbrv2.lua",
     ["12501200809"] = "csgo%20modded.lua" 
 }
 
