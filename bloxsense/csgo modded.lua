@@ -12672,6 +12672,8 @@ do -- ANCHOR hooks n shitter
             elseif self.Name == fallDamage.Name and Menu["Misc"]["Tweaks"]["Bypass Fall Damage"]["Toggle"]["Enabled"] and args[1] == args[1] then
                 return
             elseif self.Name == hitPart.Name and not Menu["Misc"]["Extra"]["Kill All"]["Toggle"]["Enabled"] then
+                if Menu["Rage"]["Aimbot"]["Enabled"]["Toggle"]["Enabled"] and Menu["Rage"]["Aimbot"]["Enabled"]["Bind"]["Active"] then
+                -- too lazy to fix indentation
                 args[1] = ragebot.currenttarget.instance
                 args[2] = ragebot.currenttarget.position
                 local dude = ragebot.currenttarget.player
@@ -12828,6 +12830,7 @@ do -- ANCHOR hooks n shitter
 
                     args[14] = nil
                     return oldNamecall(self, table.unpack(args,1,select("#",...)))
+                end
                 end
                 if Menu["Misc"]["Exploits"]["Shot players become mush"]["Toggle"]["Enabled"] then
                     args[1] = args[1].Parent.FindFirstChild(args[1].Parent, "Head") or args[1]
