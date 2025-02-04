@@ -1,8 +1,8 @@
 --[[
-	QuickLuau - Developer Utility
-	Making developing quicker by creating useful and easy-to-write functions.
+	LuauTools - Developer Utility
+	Making developing quicker and easier by creating useful and easy-to-write functions.
 	
-	Version 1.21 - Updated 29.12.24
+	Version 1.5 - Updated 04.02.2025
 
 	Inspiration from "Utility" by liablelua
 ]]
@@ -19,13 +19,17 @@ local function makeFunction(aliases: table, callback)
 	end
 end
 
+local function cframeToVec3(position: CFrame)
+    return Vector3.new(position.Position.X, position.Position.Y, position.Position.Z)
+end
+
 makeFunction({"gs", "getService", "GetService", "getservice"}, function(service: Instance)
 	return cloneref(getServ(game, service))
 end)
 
-local players, stats, tpService, uis = gs("Players"), gs("Stats"), gs("TeleportService"), gs("UserInputService")
+local players, stats, tpService, uis, httpserv, tween = gs("Players"), gs("Stats"), gs("TeleportService"), gs("UserInputService"), gs("HttpService"), gs("TweenService")
 local camera = workspace.CurrentCamera
-local instNew, drawNew, color3Hsv, vec2new, rand, huge, floor, clock, date = Instance.new, Drawing and Drawing.new or nil, Color3.fromHSV, Vector2.new, math.random, math.huge, math.floor, os.clock, os.date
+local instNew, drawNew, color3Hsv, vec2new, rand, huge, floor, clock, date, tweenInfo, strFind, tblInsert, cframeNew, ceil = Instance.new, Drawing and Drawing.new or nil, Color3.fromHSV, Vector2.new, math.random, math.huge, math.floor, os.clock, os.date, TweenInfo.new, string.find, table.insert, math.ceil
 local lplr = players.LocalPlayer
 local worldToViewport, getParts = camera.WorldToViewportPoint, camera.GetPartsObscuringTarget
 local plrTbl, plrStr = {}, ""
@@ -251,7 +255,7 @@ makeFunction({"isvisible", "isVisible", "IsVisible", "isonscreen", "isOnScreen",
 	end
 end)
 
-makeFunction({"isoncam", "isOnCam", "IsOnCam", "visibletocam", "visibleToCam", "VisibleToCam", "visibletocamera", "visibleToCamera", "VisibleToCamera", "visibleoncamera", "visibleOnCamera", "VisibleOnCamera", "isoncamera", "isOnCamera", "IsOnCamera"}, function(plr)
+makeFunction({"isoncam", "isOnCam", "IsOnCam", "visibletocam", "visibleToCam", "VisibleToCam", "visibletocamera", "visibleToCamera", "VisibleToCamera", "visibleoncamera", "visibleOnCamera", "VisibleOnCamera", "isoncamera", "isOnCamera", "IsOnCamera"}, function(plr: Player)
 	if plr == lplr then return end
 	local plrAlive, plrChar = alive(plr)
 
@@ -276,4 +280,267 @@ end)
 
 makeFunction({"getdate", "getDate", "GetDate"}, function()
 	return date("%d.%m.20%y")
+end)
+
+makeFunction({"makecfg", "makeCfg", "MakeCfg", "makeconfig", "makeConfig", "MakeConfig"}, function(name: string, folderName: string)
+    assert(name, "missing argument #1 (string expected")
+    assert(type(name) == "string", "invalid argument #1 (string expected, got " .. type(name) .. " instead)")
+    
+    if not strFind(name, ".") then
+        name ..= ".json"
+    end
+    
+    if not strFind(name, ".json") then
+        error("Only the .json extension is supported for configuration making.")
+    end
+    
+    if folderName then
+        if not isfolder(folderName) then
+            makefolder(folderName)
+        end
+        
+        name = folderName .. "/" .. name
+    end
+    
+    if not isfile(name) then
+        writefile(name, "{}")
+    end
+end)
+
+makeFunction({"getcfg", "getCfg", "GetCfg", "getconfig", "getConfig", "GetConfig"}, function(path: string)
+    assert(path, "missing argument #1 (string expected")
+    assert(type(path) == "string", "invalid argument #1 (string expected, got " .. type(path) .. " instead)")
+    assert(isfile(path), "invalid argument #1 (file specified was not found)")
+    
+    local configinst = {}
+    
+    function configinst:saveData(data: table) 
+        data = httpserv:JSONEncode(data)
+        writefile(path, data)
+    end
+    
+    function configinst:readData()
+        local parsed = httpserv:JSONDecode(readfile(path))
+        return parsed
+    end
+    
+    function configinst:getValue(value: string)
+        local parsed = httpserv:JSONDecode(readfile(path))
+        
+        if parsed[value] then
+            return parsed[value]
+        end
+    end
+    
+    function configinst:editValue(value: string, newValue: any)
+        local parsed = httpserv:JSONDecode(readfile(path))
+        
+        if parsed[value] then
+            parsed[value] = newValue
+        end
+        
+        parsed = httpserv:JSONEncode(parsed)
+        writefile(path, parsed)
+    end
+    
+    function configinst.delete()
+        delfile(path)
+    end
+    
+    return configinst
+end)
+
+makeFunction({"tptoposition", "tptoPosition", "tpToPosition", "TpToPosition", "teleporttoposition", "teleportToPosition", "TeleportToPosition"}, function(position: Vector3 | CFrame | Tween, tpType: string)
+    assert(position, "missing argument #1 (Vector3 or CFrame expected")
+    assert(typeof(position) == "Vector3" or typeof(position) == "CFrame", "invalid argument #1 (Vector3 or CFrame expected, got " .. typeof(position) .. " instead)")
+    
+    if not tpType then
+        tpType = "Normal"
+    end
+    
+    local plrAlive, char = alive()
+    
+    if plrAlive then
+        local hrp = gethrp()
+        
+        if tpType == "Normal" then
+            if typeof(position) == "Vector3" then
+                position = cframeNew(position.X, position.Y, position.Z)
+            end
+            
+            hrp.CFrame = position
+            
+        elseif tpType == "Tween" then
+            if typeof(position) == "Vector3" then
+                position = cframeNew(position.X, position.Y, position.Z)
+            end
+            
+            -- taken from some script, credits go to it
+            local time = math.ceil((char.Head.Position - cframeToVec3(position)).Magnitude / 3 + 0.5) / 50
+            local info = tweenInfo(time, Enum.EasingStyle.Linear)
+            
+            tween:Create(hrp, info, {CFrame = position}):Play()
+        end
+    end
+end)
+
+makeFunction({"tptoplayer", "tptoPlayer", "tpToPlayer", "TpToPlayer", "teleporttoplayer", "teleportToPlayer", "TeleportToPlayer", "tptoplr", "tptoPlr", "tpToPlr", "TpToPlr", "teleporttoplr", "teleportToPlr", "TeleportToPlr"}, function(player: Player, method: string)
+    assert(player, "missing argument #1 (Player expected)")
+    assert(typeof(player) == "Player", "invalid argument #1 (Player expected, got " .. typeof(player) .. " instead)")
+    
+    if not method then
+        method = "Normal"
+    end
+    
+    local plrChar, plrAlive = alive()
+    
+    if plrAlive then
+        if method == "Normal" then
+            getHrp().CFrame = getHrp(player).CFrame
+        elseif method == "Tween" then
+            local time = math.ceil((plrChar.Head.Position - cframeToVec3(position)).Magnitude / 3 + 0.5) / 50
+            local info = tweenInfo(time, Enum.EasingStyle.Linear)
+            
+            tween:Create(getHrp(), info, {CFrame = getHrp(player).CFrame})
+        end
+    end
+end)
+
+makeFunction({"tptopart", "tptoPart", "tpToPart", "TpToPart", "teleporttopart", "teleportToPart", "TeleportToPart"}, function(part: BasePart?, method: string)
+    assert(part, "missing argument #1 (Instance expected")
+    assert(type(part) == "Instance", "invalid argument #1 (Instance expected, got " .. type(part) .. " instead)")
+    
+    if not method then
+        method = "Normal"
+    end
+    
+    local plrAlive, plrChar = alive()
+    
+    if plrAlive then
+        if method == "Normal" then
+            getHrp().CFrame = part.CFrame
+        elseif method == "Tween" then
+            local time = math.ceil((plrChar.Head.Position - cframeToVec3(part.CFrame)).Magnitude / 3 + 0.5) / 25
+            local info = tweenInfo(time, Enum.EasingStyle.Linear)
+            
+            tween:Create(getHrp(), info, {CFrame = part.CFrame}):Play()
+        end
+    end
+end)
+
+makeFunction({"checkprop", "checkProp", "CheckProp", "checkproperty", "checkProperty", "CheckProperty"}, function(obj: Instance, property: string)
+	assert(obj, "missing argument #1 (Instance expected")
+	assert(type(obj) == "Instance", "invalid argument #1 (Instance expected, got " .. type(obj) .. " instead)")
+	assert(property, "missing argument #2 (string expected")
+	assert(type(property) == "string", "invalid argument #2 (string expected, got " .. type(property) .. " instead)")
+	
+	-- // i suppose this is the only way of checking
+
+	local success, _ = pcall(function()
+		local property = obj[prop]
+	end)
+
+	return success
+end)
+
+makeFunction({"searchobj", "searchObj", "SearchObj", "searchobject", "searchObject", "SearchObject", "findobj", "findObj", "FindObj", "findobject", "findObject", "FindObject"}, function(args: table)
+    local data = {
+		origin = args.origin or args.Origin or nil, -- where to search from
+		searchMode = args.searchmode or args.searchMode or args.SearchMode or "Children", -- basically :GetChildren() or :GetDescendants()
+		object = args.object or args.Object, -- the object to search for
+		-- apparently can crash lol
+		extraFilters = args.extrafilters or args.extraFilters or args.ExtraFilters, -- find by property values, e.g. filterValues = {["Name"] = "ObjectName", ["Color3"] = Color3.new()}
+		output = args.output or args.Output or false -- whether to output the objects found or not
+	}
+
+	local objTbl = {}
+	local index = 1
+
+	if not data.origin then
+		for _, obj in game:GetDescendants() do
+			if data.extraFilters or #data.extraFilters > 0 then
+				for prop, val in data.extraFilters do
+					if checkProperty(obj, prop) and obj[prop] == val then
+						tblInsert(objTbl, obj)
+
+						if data.output then
+							print("[" .. index .. "] Found matching object: " .. obj.Name .. ", Path: " .. obj:GetFullName())
+							index += 1
+						end
+					end
+				end
+			end
+		end
+
+		if #objTbl > 0 then
+			if data.output then
+				if index - 1 == 1 then
+					print(index - 1 .. " object found in total.")
+				else
+					print(index - 1 .. " objects found in total.")
+				end
+			end
+
+			return objTbl
+		end
+
+		for _, obj in game:GetDescendants() do
+			if obj.Name == data.object or obj:IsA(data.object) or strFind(obj.Name, data.object) then
+				tblInsert(objTbl, obj)
+
+				if data.output then
+					print("[" .. index .. "] Found matching object: " .. obj.Name .. ", Path: " .. obj:GetFullName())
+					index += 1
+				end
+			end
+		end
+	else
+		for _, obj in (data.searchMode == "Descendants" and data.origin:GetDescendants() or data.origin:GetChildren()) do
+			if data.extraFilters or #data.extraFilters > 0 then
+				for prop, val in data.extraFilters do
+					if checkProperty(obj, prop) and obj[prop] == val then
+						tblInsert(objTbl, obj)
+
+						if data.output then
+							print("[" .. index .. "] Found matching object: " .. obj.Name .. ", Path: " .. obj:GetFullName())
+							index += 1
+						end
+					end
+				end
+			end
+		end
+
+		if #objTbl > 0 then
+			if data.output then
+				if index - 1 == 1 then
+					print(index - 1 .. " object found in total.")
+				else
+					print(index - 1 .. " objects found in total.")
+				end
+			end
+
+			return objTbl
+		end
+
+		for _, obj in (data.searchMode == "Descendants" and data.origin:GetDescendants() or data.origin:GetChildren()) do
+			if obj.Name == data.object or obj:IsA(data.object) or strFind(obj.Name, data.object) then
+				tblInsert(objTbl, obj)
+
+				if data.output then
+					print("[" .. index .. "] Found matching object: " .. obj.Name .. ", Path: " .. obj:GetFullName())
+					index += 1
+				end
+			end
+		end
+	end
+
+	if data.output then
+		if index - 1 == 1 then
+			print(index - 1 .. " object found in total.")
+		else
+			print(index - 1 .. " objects found in total.")
+		end
+	end
+
+	return objTbl
 end)
