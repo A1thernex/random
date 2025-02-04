@@ -38,6 +38,7 @@ local lastTime, start, frameTbl = nil, nil, {}
 
 local scripts = {
 	["unc"] = "https://raw.githubusercontent.com/unified-naming-convention/NamingStandard/main/UNCCheckEnv.lua",
+	["sunc"] = "https://gitlab.com/sens3/nebunu/-/raw/main/HummingBird8's_sUNC_yes_i_moved_to_gitlab_because_my_github_acc_got_brickedd/sUNCm0m3n7.lua",
 	["iy"] = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source",
 	["dex"] = "https://raw.githubusercontent.com/infyiff/backup/main/dex.lua",
 	["esp"] = "https://raw.githubusercontent.com/ic3w0lf22/Unnamed-ESP/master/UnnamedESP.lua",
