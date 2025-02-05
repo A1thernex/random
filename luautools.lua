@@ -13,7 +13,6 @@ cloneref = cloneref or function(instance) return instance end
 local getServ = game.FindService
 
 local function makeFunction(aliases: table, callback)
-	assert(callback ~= nil, "[QuickLuau] Missing callback for new functions!")
 	for _, alias in pairs(aliases) do
 		env[alias] = callback
 	end
