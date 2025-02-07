@@ -2,7 +2,7 @@
 	LuauTools - Developer Utility
 	Making developing quicker and easier by creating useful and easy-to-write functions.
 	
-	Version 1.5 - Updated 04.02.2025
+	Version 1.6 - Updated 04.02.2025
 
 	Inspiration from "Utility" by liablelua
 ]]
@@ -26,7 +26,7 @@ makeFunction({"gs", "getService", "GetService", "getservice"}, function(service:
 	return cloneref(getServ(game, service))
 end)
 
-local players, stats, tpService, uis, httpserv, tween = gs("Players"), gs("Stats"), gs("TeleportService"), gs("UserInputService"), gs("HttpService"), gs("TweenService")
+local players, stats, tpService, uis, httpserv, tween, rs = gs("Players"), gs("Stats"), gs("TeleportService"), gs("UserInputService"), gs("HttpService"), gs("TweenService"), gs("RunService")
 local camera = workspace.CurrentCamera
 local instNew, drawNew, color3Hsv, vec2new, rand, huge, floor, clock, date, tweenInfo, strFind, tblInsert, cframeNew, ceil = Instance.new, Drawing and Drawing.new or nil, Color3.fromHSV, Vector2.new, math.random, math.huge, math.floor, os.clock, os.date, TweenInfo.new, string.find, table.insert, math.ceil
 local lplr = players.LocalPlayer
@@ -34,6 +34,7 @@ local worldToViewport, getParts = camera.WorldToViewportPoint, camera.GetPartsOb
 local plrTbl, plrStr = {}, ""
 local charSet, ranstr = "", ""
 local lastTime, start, frameTbl = nil, nil, {}
+local loops = {}
 
 local scripts = {
 	["unc"] = "https://raw.githubusercontent.com/unified-naming-convention/NamingStandard/main/UNCCheckEnv.lua",
@@ -543,4 +544,37 @@ makeFunction({"searchobj", "searchObj", "SearchObj", "searchobject", "searchObje
 	end
 
 	return objTbl
+end)
+
+makeFunction({"rsloop", "rsLoop", "RsLoop", "runserviceloop", "runserviceLoop", "runServiceLoop", "RunServiceLoop"}, function(method: string, id: string, loopFunction)
+    assert(method, "missing argument #1 (string expected")
+    assert(type(method) == "string", "invalid argument #1 (string expected, got " .. type(method) .. " instead)")
+    assert(id, "missing argument #2 (string expected)")
+    assert(type(id) == "string", "invalid argument #2 (string expected, got " .. type(id) .. " instead)")
+    assert(loopFunction, "missing argument #3 (function expected)")
+    assert(type(loopFunction) == "function", "invalid argument #3 (function expected, got " .. type(loopFunction) .. " instead)")
+    
+    if rs[method] and typeof(rs[method]) == "RBXScriptSignal" then
+        loops[id] = rs[method]:Connect(loopFunction)
+    end
+end)
+
+makeFunction({"disconnectrsloop, disconnectrsLoop", "disconnectRsLoop", "DisconnectRsLoop"}, function(id: string)
+    assert(id, "missing argument #1 (string expected)")
+    assert(type(id) == "string", "invalid argument #1 (string expected, got " .. type(id) .. " instead)")
+    
+    if loops[id] then
+        loops[id]:Disconnect()
+        loops[id] = nil
+    end
+end)
+
+makeFunction({"listrsloops", "listrsLoops", "listRsLoops", "ListRsLoops", "listrunserviceloops", "listrunserviceLoops", "listrunServiceLoops", "listRunServiceLoops", "ListRunServiceLoops"}, function()
+    local string = ""
+    
+    for id, _ in loops do
+        string ..= id .. ", "
+    end
+    
+    return string
 end)
