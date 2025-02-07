@@ -20,9 +20,9 @@ local function makeFunction(aliases: table, callback)
 	end
 end
 
-makeFunction({"gs", "getService", "GetService", "getservice"}, function(service: Instance)
+local function gs(service: Instance)
 	return cloneref(getServ(game, service))
-end)
+end
 
 local players, stats, tpService, uis, httpServ, tween, rs = gs("Players"), gs("Stats"), gs("TeleportService"), gs("UserInputService"), gs("HttpService"), gs("TweenService"), gs("RunService")
 local camera = workspace.CurrentCamera
@@ -30,9 +30,7 @@ local instNew, drawNew, color3Hsv, vec2New, vec3New, rand, huge, floor, clock, d
 local lplr = players.LocalPlayer
 local worldToViewport, getParts = camera.WorldToViewportPoint, camera.GetPartsObscuringTarget
 local getMouseLocation = uis.GetMouseLocation
-local getChildren, getDescendants = game.GetChildren, game.GetDescendants
-local findFirstChild, findFirstChildOfClass = game.FindFirstChild, game.FindFirstChildOfClass
-local getFullName = game.GetFullName
+local getChildren, getDescendants, findFirstChild, findFirstChildOfClass, getFullName = game.GetChildren, game.GetDescendants, game.FindFirstChild, game.FindFirstChildOfClass, game.GetFullName
 local isA = game.IsA
 local loops = {}
 
@@ -46,9 +44,17 @@ local scripts = {
 	["ss"] = "https://raw.githubusercontent.com/78n/SimpleSpy/refs/heads/main/SimpleSpySource.lua"
 }
 
-local function cframeToVec3(position: CFrame)
+makeFunction({"cframetovec3", "cframetoVec3", "cframeToVec3", "CFrameToVec3"}, function(position: CFrame))
     return vec3New(position.Position.X, position.Position.Y, position.Position.Z)
 end
+
+makeFunction({"vec3tocframe", "vec3toCframe", "vec3ToCFrame", "Vec3ToCFrame"}, function(position: Vector3))
+    return cframeNew(position.X, position.Y, position.Z)
+end
+
+makeFunction({"gs", "getService", "GetService", "getservice"}, function(service: Instance)
+	return gs(service)
+end)
 
 makeFunction({"isalive", "alive", "isAlive", "IsAlive", "Alive"}, function(plr: Player)
 	local plr = plr or lplr
