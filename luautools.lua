@@ -44,13 +44,13 @@ local scripts = {
 	["ss"] = "https://raw.githubusercontent.com/78n/SimpleSpy/refs/heads/main/SimpleSpySource.lua"
 }
 
-makeFunction({"cframetovec3", "cframetoVec3", "cframeToVec3", "CFrameToVec3"}, function(position: CFrame))
+makeFunction({"cframetovec3", "cframetoVec3", "cframeToVec3", "CFrameToVec3"}, function(position: CFrame)
     return vec3New(position.Position.X, position.Position.Y, position.Position.Z)
-end
+end)
 
-makeFunction({"vec3tocframe", "vec3toCframe", "vec3ToCFrame", "Vec3ToCFrame"}, function(position: Vector3))
+makeFunction({"vec3tocframe", "vec3toCframe", "vec3ToCFrame", "Vec3ToCFrame"}, function(position: Vector3)
     return cframeNew(position.X, position.Y, position.Z)
-end
+end)
 
 makeFunction({"gs", "getService", "GetService", "getservice"}, function(service: Instance)
 	return gs(service)
