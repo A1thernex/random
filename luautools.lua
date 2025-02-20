@@ -33,7 +33,7 @@ local instNew, drawNew, color3Hsv, vec2New, vec3New, rand, huge, floor, clock, d
 local lplr = players.LocalPlayer
 local worldToViewport, getParts = camera.WorldToViewportPoint, camera.GetPartsObscuringTarget
 local getMouseLocation = uis.GetMouseLocation
-local getChildren, getDescendants, findFirstChild, findFirstChildOfClass, getFullName, isA = clonefunc(game.GetChildren), clonefunc(game.GetDescendants), clonefunc(game.FindFirstChild), clonefunc(game.FindFirstChildOfClass), clonefunc(game.GetFullName), clonefunc(game.IsA)
+local getChildren, getDescendants, findFirstChild, findFirstChildOfClass, getFullName, isA = clonefunction(game.GetChildren), clonefunction(game.GetDescendants), clonefunction(game.FindFirstChild), clonefunction(game.FindFirstChildOfClass), clonefunction(game.GetFullName), clonefunction(game.IsA)
 local loops = {}
 
 local scripts = {
