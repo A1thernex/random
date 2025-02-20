@@ -10,7 +10,7 @@
 
 getgenv().tools = {}
 
-env = getgenv and getgenv() or getfenv(0))
+env = getgenv()
 cloneref = cloneref or function(...) return ... end
 
 local game = cloneref(game)
