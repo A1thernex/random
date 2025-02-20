@@ -1,18 +1,21 @@
---[[
-	LuauTools - Developer Utility
+--[[
+	LuauTools - Developing Utility
 	Making developing quicker and easier by creating useful and easy-to-write functions.
 	
-	Version 1.61 - Updated 07.02.2025
+	Version 1.7 - Updated 24.02.2025
 
+	Made by A1thernex
 	Inspiration from "Utility" by liablelua
 ]]
 
-env = getgenv and getgenv() or getfenv(0)
-cloneref = cloneref or function(instance) return instance end
+getgenv().tools = {}
 
-local game = game
+env = loadintogenv and (getgenv and getgenv() or getfenv(0)) or tools
+cloneref = cloneref or function(...) return ... end
 
-local getServ = game.GetService
+local game = cloneref(game)
+
+local getServ = clonefunction(game.GetService)
 
 local function makeFunction(aliases: table, callback)
 	for _, alias in pairs(aliases) do
@@ -30,8 +33,7 @@ local instNew, drawNew, color3Hsv, vec2New, vec3New, rand, huge, floor, clock, d
 local lplr = players.LocalPlayer
 local worldToViewport, getParts = camera.WorldToViewportPoint, camera.GetPartsObscuringTarget
 local getMouseLocation = uis.GetMouseLocation
-local getChildren, getDescendants, findFirstChild, findFirstChildOfClass, getFullName = game.GetChildren, game.GetDescendants, game.FindFirstChild, game.FindFirstChildOfClass, game.GetFullName
-local isA = game.IsA
+local getChildren, getDescendants, findFirstChild, findFirstChildOfClass, getFullName, isA = clonefunc(game.GetChildren), clonefunc(game.GetDescendants), clonefunc(game.FindFirstChild), clonefunc(game.FindFirstChildOfClass), clonefunc(game.GetFullName), clonefunc(game.IsA)
 local loops = {}
 
 local scripts = {
@@ -589,3 +591,35 @@ makeFunction({"listrsloops", "listrsLoops", "listRsLoops", "ListRsLoops"}, funct
     
     return string
 end)
+
+makeFunction({"setws", "setWS", "SetWS", "setwalkspeed", "setWalkSpeed", "SetWalkSpeed"}, function(ws: number)
+	local hum = getHum()
+
+	if hum then
+		hum.WalkSpeed = ws
+	end
+end)
+
+makeFunction({"setjp", "setJP", "SetJP", "setjumppower", "setJumpPower", "SetJumpPower"}, function(jp: number)
+	local hum = getHum()
+
+	if hum then
+		hum.JumpPower = jp
+	end
+end)
+
+makeFunction({"setgrav", "setGrav", "SetGrav", "setgravity", "setGravity", "SetGravity"}, function(grav: number)
+	workspace.Gravity = grav
+end)
+
+makeFunction({"clonefunc", "cloneFunc", "CloneFunc", "cloneFunction", "CloneFunction"}, clonefunction)
+makeFunction({"hookmm", "HookMM", "hookMetaMethod", "HookMetaMethod"}, hookmetamethod)
+makeFunction({"getrawmt", "getRawMt", "GetRawMt", "getRawMetatable", "GetRawMetatable"}, getrawmetatable)
+makeFunction({"hookfunc", "hookFunc", "hookFunction", "HookFunction"}, hookfunction)
+makeFunction({"firepp", "firePP", "FirePP", "fireprox", "fireProx", "FireProx", "fireProximityPrompt", "FireProximityPrompt"}, fireproximityprompt)
+makeFunction({"firecd", "fireCD", "FireCD", "fireClickDetector", "FireClickDetector"}, fireclickdetector)
+makeFunction({"fireti", "fireTI", "FireTI", "firetouch", "fireTouch", "FireTouch", "fireTouchInterest"}, firetouchinterest)
+
+if not loadintogenv then
+	return tools
+end
