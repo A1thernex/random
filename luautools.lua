@@ -9,9 +9,8 @@
 ]]
 
 getgenv().tools = {}
-local loadintogenv = (...) and (...)["loadintogenv"] or false
 
-env = loadintogenv and (getgenv and getgenv() or getfenv(0)) or tools
+env = getgenv and getgenv() or getfenv(0))
 cloneref = cloneref or function(...) return ... end
 
 local game = cloneref(game)
@@ -21,6 +20,7 @@ local getServ = clonefunction(game.GetService)
 local function makeFunction(aliases: table, callback)
 	for _, alias in pairs(aliases) do
 		env[alias] = callback
+		tools[alias] = callback
 	end
 end
 
@@ -620,7 +620,3 @@ makeFunction({"hookfunc", "hookFunc", "hookFunction", "HookFunction"}, hookfunct
 makeFunction({"firepp", "firePP", "FirePP", "fireprox", "fireProx", "FireProx", "fireProximityPrompt", "FireProximityPrompt"}, fireproximityprompt)
 makeFunction({"firecd", "fireCD", "FireCD", "fireClickDetector", "FireClickDetector"}, fireclickdetector)
 makeFunction({"fireti", "fireTI", "FireTI", "firetouch", "fireTouch", "FireTouch", "fireTouchInterest"}, firetouchinterest)
-
-if not loadintogenv then
-	return tools
-end
