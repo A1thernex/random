@@ -2,7 +2,7 @@
 	LuauTools - Developing Utility
 	Making developing quicker and easier by creating useful and easy-to-write functions.
 	
-	Version 1.7 - Updated 24.02.2025
+	Version 1.7 - Updated 20.02.2025
 
 	Made by A1thernex
 	Inspiration from "Utility" by liablelua
