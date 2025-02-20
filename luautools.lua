@@ -9,6 +9,7 @@
 ]]
 
 getgenv().tools = {}
+local loadintogenv = (...) and (...)["loadintogenv"] or false
 
 env = loadintogenv and (getgenv and getgenv() or getfenv(0)) or tools
 cloneref = cloneref or function(...) return ... end
