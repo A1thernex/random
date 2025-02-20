@@ -1,4 +1,4 @@
---[[
+--[[
 	LuauTools - Developing Utility
 	Making developing quicker and easier by creating useful and easy-to-write functions.
 	
