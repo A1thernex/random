@@ -5534,7 +5534,7 @@ do
     UILibrary:CreateSubSection("Visuals", "ESP", {"Local"}, false, 1, 0)
     UILibrary:CreateSubSection("Visuals", "CamViewModel", {"Camera", "Viewmodel", "Crosshair", "Particle"}, true, 0.44, 0)
     UILibrary:CreateSubSection("Visuals", "RandomESP", {"World", "Bloom", "Atmosphere"}, true, 0.27, -8)
-    UILibrary:CreateSubSection("Visuals", "RandomESP2", {"Misc", "Extra", "Bullets", "Hits", "FOV"}, true, 0.29, -8)
+    UILibrary:CreateSubSection("Visuals", "RandomESP2", {"Misc", "Bullets", "Hits", "FOV", "Extra"}, true, 0.29, -8)
     
     -- Misc
     UILibrary:CreateSubSection("Misc", "MovementTweaks", {"Movement", "Tweaks"}, false, 0.5)
@@ -5780,6 +5780,8 @@ do
     UILibrary:CreateDropdown({Name = "Ragdoll Cham Material", Tab = "Visuals", Section = "Extra", Values = {"Ghost", "Flat", "Custom", "Reflective", "Metallic"}})
     UILibrary:CreateButton({Name = "Remove Flash", Tab = "Visuals", Section = "Extra"})
     UILibrary:CreateButton({Name = "Remove Smoke", Tab = "Visuals", Section = "Extra"})
+    UILibrary:CreateButton({Name = "Remove Bullet Holes", Tab = "Visuals", Section = "Extra"})
+    UILibrary:CreateButton({Name = "Remove Hit Effects", Tab = "Visuals", Section = "Extra"})
 
     UILibrary:CreateButton({Name = "Hit Chams", Tab = "Visuals", Section = "Hits", Colors = {Color3.new(0.729412, 0.572549, 1)}, Transparency = {0/255}})
     UILibrary:CreateSlider({Name = "Hit Cham Life Time", Tab = "Visuals", Section = "Hits", MinimumNumber = 1, MaximumNumber = 10, Suffix = " s"})
@@ -5856,8 +5858,6 @@ do
     UILibrary:CreateButton({Name = "Kill Say", Tab = "Misc", Section = "Extra"})
     UILibrary:CreateDropdown({Name = "Kill Say Mode", Tab = "Misc", Section = "Extra", Values = {"Text Box", "File"}})
     UILibrary:CreateTextBox({Name = "Kill Say Message", Tab = "Misc", Section = "Extra", Default = "sit nn dog"})
-    UILibrary:CreateButton({Name = "Remove Bullet Holes", Tab = "Misc", Section = "Extra"})
-    UILibrary:CreateButton({Name = "Remove Hit Effects", Tab = "Misc", Section = "Extra"})
     --UILibrary:CreateButton({Name = "Remove Kill Bricks", Tab = "Misc", Section = "Extra"})
     --UILibrary:CreateButton({Name = "Auto Martyrdom", Tab = "Misc", Section = "Extra"})
     UILibrary:CreateTap({Name = "Join A New Game", Tab = "Misc", Section = "Extra", Confirmation = true})
