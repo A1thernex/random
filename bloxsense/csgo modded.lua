@@ -13040,14 +13040,14 @@ do --ANCHOR fixes
         if pos ~= pos then
             pos = emptyVec3
         end
-        if Menu["Misc"]["Extra"]["Remove Bullet Holes"]["Toggle"]["Enabled"] then
+        if Menu["Visuals"]["Extra"]["Remove Bullet Holes"]["Toggle"]["Enabled"] then
             bloodsplatter = false
         end
         return oldBulletHole(part, pos, bloodsplatter)
     end
     local oldSplatter = client.splatterBlood 
     client.splatterBlood = function(origin, humanoid, dmg, startpos, pos)
-        if Menu["Misc"]["Extra"]["Remove Hit Effects"]["Toggle"] then
+        if Menu["Visuals"]["Extra"]["Remove Hit Effects"]["Toggle"] then
             return
         end
         return oldSplatter(origin, humanoid, dmg, startpos, pos)
@@ -13076,7 +13076,7 @@ do --ANCHOR fixes
         end
     end
 
-    Menu["Misc"]["Extra"]["Remove Bullet Holes"]["Toggle"].Changed:Connect(function(bool)
+    Menu["Visuals"]["Extra"]["Remove Bullet Holes"]["Toggle"].Changed:Connect(function(bool)
         if bool then
             for i,v in next, workspace.Debris:GetChildren() do
                 if v.Name == "Bullet" and Menu["Misc"]["Extra"]["Remove Bullet Holes"]["Toggle"]["Enabled"] then
