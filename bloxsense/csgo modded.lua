@@ -13065,13 +13065,13 @@ do --ANCHOR fixes
     --Menu["Misc"]["Extra"]["Remove Hit Effects"]["Toggle"].Changed:Connect(HatObject)
 
     workspace.Debris.ChildAdded:Connect(function(child)
-        if child.Name == "Bullet" and Menu["Misc"]["Extra"]["Remove Bullet Holes"]["Toggle"]["Enabled"] then
+        if child.Name == "Bullet" and Menu["Visuals"]["Extra"]["Remove Bullet Holes"]["Toggle"]["Enabled"] then
             task.spawn(child.Destroy, child)
         end
     end)
 
     for i,v in next, workspace.Debris:GetChildren() do
-        if v.Name == "Bullet" and Menu["Misc"]["Extra"]["Remove Bullet Holes"]["Toggle"]["Enabled"] then
+        if v.Name == "Bullet" and Menu["Visuals"]["Extra"]["Remove Bullet Holes"]["Toggle"]["Enabled"] then
             v:Destroy()
         end
     end
@@ -13079,7 +13079,7 @@ do --ANCHOR fixes
     Menu["Visuals"]["Extra"]["Remove Bullet Holes"]["Toggle"].Changed:Connect(function(bool)
         if bool then
             for i,v in next, workspace.Debris:GetChildren() do
-                if v.Name == "Bullet" and Menu["Misc"]["Extra"]["Remove Bullet Holes"]["Toggle"]["Enabled"] then
+                if v.Name == "Bullet" and Menu["Visuals"]["Extra"]["Remove Bullet Holes"]["Toggle"]["Enabled"] then
                     v:Destroy()
                 end
             end
