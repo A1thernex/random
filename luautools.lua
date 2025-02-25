@@ -446,7 +446,7 @@ end)
 
 makeFunction({"checkprop", "checkProp", "CheckProp", "checkproperty", "checkProperty", "CheckProperty"}, function(obj: Instance, property: string)
 	assert(obj, "missing argument #1 (Instance expected")
-	assert(type(obj) == "Instance", "invalid argument #1 (Instance expected, got " .. type(obj) .. " instead)")
+	assert(typeof(obj) == "Instance", "invalid argument #1 (Instance expected, got " .. type(obj) .. " instead)")
 	assert(property, "missing argument #2 (string expected")
 	assert(type(property) == "string", "invalid argument #2 (string expected, got " .. type(property) .. " instead)")
 	
