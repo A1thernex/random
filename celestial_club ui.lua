@@ -66,7 +66,7 @@ local Library = {}; do
         end;
 
         if not isfile(Library.FolderName .. '/Utilities/Shadow.png') then
-            writefile(Library.FolderName .. '/Utilities/Shadow.png', game:HttpGet("https://raw.githubusercontent.com/sametexe001/celestial.club/refs/heads/main/images/shadow.png"));
+            writefile(Library.FolderName .. '/Utilities/Shadow.png', game:HttpGet("https://github.com/sametexe001/celestial.club/blob/0e73031e848e7c639257aa65d2a6682996979fb1/images/shadow.png?raw=true"));
         end;
 
         if not isfile(Library.FolderName .. '/Utilities/Logo.png') then
