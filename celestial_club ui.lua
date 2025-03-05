@@ -2552,7 +2552,7 @@ local Library = {}; do
         Objects["text"].Parent = Objects["keybind"]
 
         Library:AddToRegistry(Objects["text"], {
-            TextColor = "Text"
+            TextColor3 = "Text"
         })
 
         Objects["UIStroke"] = Instance.new("UIStroke")
@@ -2576,7 +2576,7 @@ local Library = {}; do
         Objects["key"].Parent = Objects["keybind"]
 
         Library:AddToRegistry(Objects["key"], {
-            TextColor = "Text"
+            TextColor3 = "Text"
         })
 
         Objects["UIStroke2"] = Instance.new("UIStroke")
@@ -2612,7 +2612,7 @@ local Library = {}; do
                 end;
                 Library:RemoveFromRegistry(Objects["key"])
                 Library:AddToRegistry(Objects["key"], {
-                    TextColor = "Text"
+                    TextColor3 = "Text"
                 })
                 game:GetService("TweenService"):Create(Objects["key"], TweenInfo.new(0.13, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {TextColor3 = Library.Text}):Play();
             else
@@ -2639,7 +2639,7 @@ local Library = {}; do
                 Keybind.IsBeingSelected = false
                 Library:RemoveFromRegistry(Objects["key"])
                 Library:AddToRegistry(Objects["key"], {
-                    TextColor = "Text"
+                    TextColor3 = "Text"
                 })
                 game:GetService("TweenService"):Create(Objects["key"], TweenInfo.new(0.13, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {TextColor3 = Library.Text}):Play();
             end;
@@ -2649,7 +2649,7 @@ local Library = {}; do
             task.wait(0.1)
             Library:RemoveFromRegistry(Objects["key"])
             Library:AddToRegistry(Objects["key"], {
-                TextColor = "Accent"
+                TextColor3 = "Accent"
             })
             game:GetService("TweenService"):Create(Objects["key"], TweenInfo.new(0.13, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {TextColor3 = Library.Accent}):Play();
             Keybind.IsBeingSelected = true;
@@ -2774,7 +2774,7 @@ local Library = {}; do
         Objects["text"].Parent = Objects["colorpicker"]
 
         Library:AddToRegistry(Objects["text"], {
-            TextColor = "Text"
+            TextColor3 = "Text"
         })
 
         Objects["UIStroke1"] = Instance.new("UIStroke")
