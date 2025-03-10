@@ -169,10 +169,12 @@ end
 resume(create(function()
     RenderStepped:Connect(function()
         if SilentAimSettings.FOVVisible then 
-            setrenderproperty(fov_circle, "Visible", SilentAimSettings.FOVVisible)
+            setrenderproperty(fov_circle, "Visible", true)
             setrenderproperty(fov_circle, "Color", SilentAimSettings.FOVColor)
             setrenderproperty(fov_circle, "Position", getMousePosition())
             setrenderproperty(fov_circle, "Radius", SilentAimSettings.FOVRadius)
+        else
+            setrenderproperty(fov_circle, "Visible", false)
         end
     end)
 end))
