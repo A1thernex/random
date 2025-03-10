@@ -172,7 +172,7 @@ resume(create(function()
             setrenderproperty(fov_circle, "Visible", SilentAimSettings.FOVVisible)
             setrenderproperty(fov_circle, "Color", SilentAimSettings.FOVColor)
             setrenderproperty(fov_circle, "Position", getMousePosition())
-            setrenderproperty(fov_circle, "Radius", SilentAimSettings.FOVRaduis)
+            setrenderproperty(fov_circle, "Radius", SilentAimSettings.FOVRadius)
         end
     end)
 end))
