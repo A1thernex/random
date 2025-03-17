@@ -1,8 +1,3 @@
---[[
-TODO:
-* test further for issues
-]]
-
 local esp = loadstring(game:HttpGet("https://raw.githubusercontent.com/A1thernex/modified-esp/main/main.lua"))()
 local sa = loadstring(game:HttpGet("https://raw.githubusercontent.com/A1thernex/random/refs/heads/main/universal%20silent%20aim.lua"))()
 
@@ -24,12 +19,22 @@ local lighting = gs("Lighting")
 local uis = gs("UserInputService")
 
 local lplr = plrs.LocalPlayer
+local cam = workspace.CurrentCamera
+
+local vec3, vec2, cframe, angles = Vector3.new, Vector2.new, CFrame.new, CFrame.Angles
+local atan2, rad, floor, clamp, round, huge, abs, rand = math.atan2, math.rad, math.floor, math.clamp, math.round, math.huge, math.abs, math.random 
+local col3rgb, col3hsv, col3tohsv = Color3.fromRGB, Color3.fromHSV, Color3.toHSV
+local ray = Ray.new
+local tick = tick
+
+local ffc, ffcoc, fporwil, fporwwl = game.FindFirstChild, game.FindFirstChildOfClass, workspace.FindPartOnRayWithIgnoreList, workspace.FindPartOnRayWithWhitelist
+local isa, isdof = game.IsA, game.IsDescendantOf
+local wtvp, vptr = cam.WorldToViewportPoint, cam.ViewportPointToRay
+local keydown, mouseloc = uis.IsKeyDown, uis.GetMouseLocation
 
 local aimcircle, deadcircle = Drawing.new("Circle"), Drawing.new("Circle")
-
 local hrpcf = nil
-
-local spin = nil
+local spin = 0
 
 local Atlanta = {
     Locals = {
@@ -54,8 +59,6 @@ local defaultskybox = {
     ["SkyboxRt"] = lighting.Sky.SkyboxRt,
     ["SkyboxUp"] = lighting.Sky.SkyboxUp,
 }
-
--- "Nebula", "Vaporwave", "Clouds", "Twilight", "Pink Vision", "Blue Sky", "Green Sky", "Night Sky", "Pink Daylight", "Morning Glow", "Fade Blue", "Neptune", "Redshift"
 
 local skyboxes = { 
     ["Nebula"] = {      
@@ -182,9 +185,7 @@ local default = {
     Lighting = {
         ClockTime = lighting.ClockTime,
         Brightness = lighting.Brightness,
-        ShadowSoftness = lighting.ShadowSoftness,
         ExposureCompensation = lighting.ExposureCompensation,
-        GeographicLatitude = lighting.GeographicLatitude,
 
         Ambient = lighting.Ambient,
         OutdoorAmbient = lighting.OutdoorAmbient,
@@ -205,15 +206,25 @@ local default = {
         Atmosphere = {
             Color = lighting.Atmosphere.Color,
             Decay = lighting.Atmosphere.Decay
-        }
+        },
+    },
+
+    Camera = {
+        FieldOfView = cam.FieldOfView
     }
 }
 
+local function rotatey(cfr)
+    local _, y, _ = cfr:ToOrientation()
+
+    return cframe(cfr.Position) * angles(0, y, 0)
+end
+
 local function getrainbow(speed: number, color: Color3)
-    local hue, sat, val = Color3.toHSV(color)
+    local hue, sat, val = col3tohsv(color)
     local tick = tick()
     
-    return (Color3.fromHSV((tick * (Options.chamrainsp.Value / 100) - math.floor(tick * (Options.chamrainsp.Value / 100))), sat, val))
+    return (col3hsv((tick * (Options.chamrainsp.Value / 100) - floor(tick * (Options.chamrainsp.Value / 100))), sat, val))
 end
 
 function chams.apply(color: Color3, trans: number, rainbow: boolean)
@@ -221,7 +232,7 @@ function chams.apply(color: Color3, trans: number, rainbow: boolean)
 
     if alive then
         for _, part in char:GetChildren() do
-            if part:IsA("MeshPart") then
+            if isa(part, "MeshPart") then
                 if not chams.oldvalues[part.Name] then
                     chams.oldvalues[part.Name] = {}
                     chams.oldvalues[part.Name]["Color"] = part.Color
@@ -231,7 +242,7 @@ function chams.apply(color: Color3, trans: number, rainbow: boolean)
                 part.Color = rainbow and getrainbow(Options.chamrainsp.Value, color) or color
                 part.Material = "ForceField"
                 part.Transparency = trans
-            elseif part:IsA("Accessory") then
+            elseif isa(part, "Accessory") then
                 if not chams.oldvalues[part.Name] then
                     chams.oldvalues[part.Name] = {}
                     chams.oldvalues[part.Name]["Color"] = part.Handle.Color
@@ -279,7 +290,7 @@ local function applyskybox(skybox: string)
 end
 
 function desync:getfakepos()
-	return desync["origin"] or CFrame.new()
+	return desync["origin"] or cframe()
 end
 	   
 function desync:setfakepos(new)
@@ -299,7 +310,7 @@ function desync.run(a, origin)
 end
 
 local Window = Library:CreateWindow({
-	Title = 'euphoria | v0.1 [beta build]',
+	Title = 'euphoria [universal] | v1',
 	Center = true,
 	AutoShow = true,
 	Resizable = true,
@@ -325,7 +336,7 @@ comAim:AddToggle("aimas", {
     Callback = function() end
 }):AddKeyPicker("aimaskey", {
     Default = "E",
-    Mode = "Hold",
+    Mode = "Toggle",
     Text = "Aim Assist",
     SyncToggleState = true,
     Callback = function() end
@@ -536,7 +547,7 @@ comSil:AddSlider("silfov", {
 })
 
 comSil:AddDropdown("silmet", {
-    Values = {"Raycast", "FindPartOnRay", "FindPartOnRayWithWhiteList", "FindPartOnRayWithIgnoreList", "Mouse.Hit/Target"},
+    Values = {"Raycast", "FindPartOnRay", "FindPartOnRayWithWhitelist", "FindPartOnRayWithIgnoreList", "Mouse.Hit/Target"},
     Text = "Method",
     Default = 1,
     Callback = function(val) 
@@ -632,6 +643,8 @@ visEspSet:AddToggle("fadeout", {
         esp.FadeOut.OnDistance = val
     end
 })
+
+visEspSet:AddDivider()
 
 visEspSet:AddDropdown("font", {
     Values = {"ProggyClean", "SmallestPixel", "Minecraftia", "Verdana", "VerdanaBold", "Tahoma", "TahomaBold"},
@@ -786,7 +799,7 @@ visBox:AddToggle("boxtog", {
         esp.Boxes.Enabled = val
     end
 }):AddColorPicker("boxcol", {
-    Default = Color3.fromRGB(255, 255, 255),
+    Default = col3rgb(255, 255, 255),
     Title = "Box Color",
     Callback = function()
         if Toggles.esptog.Value then
@@ -812,7 +825,7 @@ visBox:AddToggle("boxfill", {
         esp.Boxes.Filled.Enabled = val
     end
 }):AddColorPicker("boxfillcol", {
-    Default = Color3.fromRGB(0, 0, 0),
+    Default = col3rgb(0, 0, 0),
     Transparency = 0.75,
     Title = "Fill Color",
     Callback = function()
@@ -831,7 +844,7 @@ visBox:AddToggle("boxgrad", {
         esp.Boxes.Gradient = val
     end
 }):AddColorPicker("boxgradcol1", {
-    Default = Color3.fromRGB(119, 120, 255),
+    Default = col3rgb(119, 120, 255),
     Title = "Gradient Color 1",
     Callback = function()
         if Toggles.esptog.Value then
@@ -839,7 +852,7 @@ visBox:AddToggle("boxgrad", {
         end
     end
 }):AddColorPicker("boxgradcol2", {
-    Default = Color3.fromRGB(0, 0, 0),
+    Default = col3rgb(0, 0, 0),
     Title = "Gradient Color 2",
     Callback = function()
         if Toggles.esptog.Value then
@@ -882,7 +895,7 @@ visHp:AddToggle("hptog", {
         esp.HealthBar.Enabled = val
     end
 }):AddColorPicker("hpcol", {
-    Default = Color3.fromRGB(0, 255, 0),
+    Default = col3rgb(0, 255, 0),
     Title = "Health Bar Color",
     Callback = function()
         if Toggles.esptog.Value then
@@ -910,7 +923,7 @@ visHp:AddToggle("hptext", {
         esp.HealthBar.HealthText = val
     end
 }):AddColorPicker("hptextcol", {
-    Default = Color3.fromRGB(255, 255, 255),
+    Default = col3rgb(255, 255, 255),
     Title = "Health Text Color",
     Callback = function()
         if Toggles.esptog.Value then
@@ -946,7 +959,7 @@ visHp:AddToggle("hpgrad", {
         esp.HealthBar.Gradient = val
     end
 }):AddColorPicker("hpgradcol1", {
-    Default = Color3.fromRGB(200, 0, 0),
+    Default = col3rgb(200, 0, 0),
     Title = "Gradient Color 1",
     Callback = function()
         if Toggles.esptog.Value then
@@ -954,7 +967,7 @@ visHp:AddToggle("hpgrad", {
         end
     end
 }):AddColorPicker("hpgradcol2", {
-    Default = Color3.fromRGB(60, 60, 125),
+    Default = col3rgb(60, 60, 125),
     Title = "Gradient Color 2",
     Callback = function()
         if Toggles.esptog.Value then
@@ -962,7 +975,7 @@ visHp:AddToggle("hpgrad", {
         end
     end
 }):AddColorPicker("hpgradcol3", {
-    Default = Color3.fromRGB(119, 129, 255),
+    Default = col3rgb(119, 129, 255),
     Title = "Gradient Color 3",
     Callback = function()
         if Toggles.esptog.Value then
@@ -1005,7 +1018,7 @@ visChams:AddToggle("chamtog", {
         esp.Chams.Enabled = val
     end
 }):AddColorPicker("chamfillcol", {
-    Default = Color3.fromRGB(119, 129, 255),
+    Default = col3rgb(119, 129, 255),
     Title = "Fill Color",
     Transparency = 0,
     Callback = function()
@@ -1015,7 +1028,7 @@ visChams:AddToggle("chamtog", {
         end
     end
 }):AddColorPicker("chamoutcol", {
-    Default = Color3.fromRGB(119, 129, 255),
+    Default = col3rgb(119, 129, 255),
     Title = "Outline Color",
     Transparency = 0,
     Callback = function()
@@ -1076,7 +1089,7 @@ visSkel:AddToggle("skeltog", {
         esp.Skeleton.Enabled = val
     end
 }):AddColorPicker("skelcol", {
-    Default = Color3.fromRGB(255, 255, 255),
+    Default = col3rgb(255, 255, 255),
     Title = "Skeleton Color",
     Transparency = 0,
     Callback = function()
@@ -1114,10 +1127,10 @@ visSkel:SetupDependencies({
 local visTabbox = Tabs.Visuals:AddLeftTabbox()
 local visWorld = visTabbox:AddTab("World")
 local visChar = visTabbox:AddTab("Self")
-local visFov = visTabbox:AddTab("FOV")
+local visFov = visTabbox:AddTab("FOVs")
 
 visWorld:AddToggle("shadows", {
-    Text = "Global Shadows",
+    Text = "Show Shadows",
     Default = true,
     Risky = false,
     Callback = function(val)
@@ -1218,6 +1231,8 @@ visWorld:AddToggle("atmos", {
     end
 })
 
+visWorld:AddDivider()
+
 visWorld:AddSlider("clocktime", {
     Text = "Clock Time",
     Default = default.Lighting.ClockTime,
@@ -1237,28 +1252,6 @@ visWorld:AddSlider("bright", {
     Rounding = 1,
     Callback = function(val)
         lighting.Brightness = val 
-    end
-})
-
-visWorld:AddSlider("geograph", {
-    Text = "Geographic Latitude",
-    Default = 7.095,
-    Min = 0,
-    Max = 15,
-    Rounding = 3,
-    Callback = function(val)
-        lighting.GeographicLatitude = val 
-    end
-})
-
-visWorld:AddSlider("shadowsoft", {
-    Text = "Shadow Softness",
-    Default = 0.2,
-    Min = 0,
-    Max = 1,
-    Rounding = 2,
-    Callback = function(val)
-        lighting.ShadowSoftness = val 
     end
 })
 
@@ -1310,7 +1303,7 @@ visChar:AddToggle("charchams", {
     Callback = function() end
 }):AddColorPicker("chamcol", {
     Title = "Cham Color",
-    Default = Color3.fromRGB(130, 168, 255),
+    Default = col3rgb(130, 168, 255),
     Transparency = 0,
     Callback = function() end
 })
@@ -1334,7 +1327,7 @@ visChar:AddSlider("chamrainsp", {
 visChar:AddToggle("thirdp", {
     Text = "Third Person",
     Default = false,
-    Tooltip = "Third person for games that don't let you play in third person mode. Do not enable otherwise.",
+    Tooltip = "Third person for games that don't let you play in third person mode.\nDo not enable otherwise.",
     Callback = function(val)
         lplr.CameraMode = val and Enum.CameraMode.Classic or Enum.CameraMode.LockFirstPerson
         lplr.CameraMaxZoomDistance = Options.tpdist.Value
@@ -1362,14 +1355,25 @@ visChar:AddSlider("tpdist", {
     end
 })
 
+visChar:AddSlider("fieldofview", {
+    Text = "Field Of View",
+    Default = default.Camera.FieldOfView,
+    Min = 1,
+    Max = 120,
+    Rounding = 0,
+    Callback = function(val)
+        cam.FieldOfView = val
+    end 
+})
+
 visFov:AddToggle("aimcirc", {
-    Text = "Aim Assist FOV Circle",
+    Text = "AA FOV Circle",
     Default = false,
     Risky = false,
     Callback = function() end
 }):AddColorPicker("aimcirccol", {
     Title = "Circle Color",
-    Default = Color3.fromRGB(93, 62, 152),
+    Default = col3rgb(93, 62, 152),
     Transparency = 0,
     Callback = function() end
 })
@@ -1383,13 +1387,13 @@ visFov:AddToggle("deadcirc", {
     end
 }):AddColorPicker("deadcirccol", {
     Title = "Circle Color",
-    Default = Color3.fromRGB(255, 0, 0),
+    Default = col3rgb(255, 0, 0),
     Transparency = 0,
     Callback = function() end
 })
 
 visFov:AddToggle("sacirc", {
-    Text = "Bullet Redirection FOV Circle",
+    Text = "BR FOV Circle",
     Default = false,
     Risky = false,
     Callback = function(val) 
@@ -1401,7 +1405,7 @@ visFov:AddToggle("sacirc", {
     end
 }):AddColorPicker("sacirccol", {
     Title = "Circle Color",
-    Default = Color3.fromRGB(103, 232, 255),
+    Default = col3rgb(103, 232, 255),
     Callback = function(val) 
         if Toggles.sacirc.Value then
             sa.FOVColor = val
@@ -1525,6 +1529,20 @@ miscExp:AddSlider("delayoff", {
     Callback = function() end
 })
 
+--[[miscExp:AddToggle("blockpos", {
+    Text = "Block Position Update",
+    Default = false,
+    Risky = false,
+    Tooltip = "Blocks any updates for your server position.",
+    Callback = function() end
+}):AddKeyPicker("blockposkey", {
+    Text = "Block Position Update",
+    Default = "Z",
+    Mode = "Toggle",
+    SyncToggleState = true,
+    Callback = function() end
+})]]
+
 local miscOther = Tabs.Misc:AddLeftGroupbox("Other")
 
 miscOther:AddToggle("noclip", {
@@ -1583,12 +1601,12 @@ function Atlanta:GetCharacter(Player)
     end
     --
     function Atlanta:GetHumanoid(Player, Character)
-        return Character:FindFirstChildOfClass("Humanoid")
+        return ffcoc(Character, "Humanoid")
     end
     --
     function Atlanta:GetHealth(Player, Character, Humanoid)
         if Humanoid then
-            return math.clamp(Humanoid.Health, 0, Humanoid.MaxHealth), Humanoid.MaxHealth
+            return clamp(Humanoid.Health, 0, Humanoid.MaxHealth), Humanoid.MaxHealth
         end
     end
     --
@@ -1621,9 +1639,9 @@ function Atlanta:ClientAlive(Player, Character, Humanoid)
 function Atlanta:GetOrigin(Origin)
         if Origin == "Head" then
             local Object, Humanoid, RootPart = Atlanta:ValidateClient(lplr)
-            local Head = Object:FindFirstChild("Head")
+            local Head = ffc(Object, "Head")
             --
-            if Head and Head:IsA("RootPart") then
+            if Head and isa(Head, "RootPart") then
                 return Head.CFrame.Position
             end
         elseif Origin == "Torso" then
@@ -1634,7 +1652,7 @@ function Atlanta:GetOrigin(Origin)
             end
         end
         --
-        return workspace.CurrentCamera.CFrame.Position
+        return cam.CFrame.Position
     end
 
 function Atlanta:GetBodyParts(Character, RootPart, Indexes, Hitboxes)
@@ -1642,7 +1660,7 @@ function Atlanta:GetBodyParts(Character, RootPart, Indexes, Hitboxes)
         local Hitboxes = Hitboxes or {"Head", "Torso", "Arms", "Legs"}
         --
         for Index, Part in pairs(Character:GetChildren()) do
-            if Part:IsA("BasePart") and Part ~= RootPart then
+            if isa(Part, "BasePart") and Part ~= RootPart then
                 if Hitboxes["Head"] and Part.Name:lower():find("head") then
                     Parts[Indexes and Part.Name or #Parts + 1] = Part
                 elseif Hitboxes["Torso"] and Part.Name:lower():find("torso") then
@@ -1664,10 +1682,10 @@ function Atlanta:RayCast(Part, Origin, Ignore, Distance)
         local Ignore = Ignore or {}
         local Distance = Distance or 2000
         --
-        local Cast = Ray.new(Origin, (Part.Position - Origin).Unit * Distance)
-        local Hit = workspace:FindPartOnRayWithIgnoreList(Cast, Ignore)
+        local Cast = ray(Origin, (Part.Position - Origin).Unit * Distance)
+        local Hit = fporwil(workspace, Cast, Ignore)
         --
-        return (Hit and Hit:IsDescendantOf(Part.Parent)) == true, Hit
+        return (Hit and isdof(Hit, Part.Parent)) == true, Hit
     end
 
 function Atlanta:GetAimAssistTarget()
@@ -1676,10 +1694,10 @@ function Atlanta:GetAimAssistTarget()
             Object = nil,
             Part = nil,
             Vector = nil,
-            Magnitude = math.huge
+            Magnitude = huge
         }
         --
-        local MouseLocation = uis:GetMouseLocation()
+        local MouseLocation = mouseloc(uis)
         --
         local Randomise = Toggles.randhb.Value
         local Origin = Options.wallcheckor.Value
@@ -1701,7 +1719,7 @@ function Atlanta:GetAimAssistTarget()
         local PossibleTarget = {
             Player = nil,
             Object = nil,
-            Magnitude = math.huge
+            Magnitude = huge
         }
         --
         for Index, Player in pairs(plrs:GetPlayers()) do
@@ -1711,19 +1729,19 @@ function Atlanta:GetAimAssistTarget()
                 local Object, Humanoid, RootPart = Atlanta:ValidateClient(Player)
                 --
                 if (Object and Humanoid and RootPart) then
-                    if (Checks["Forcefield Check"] and Object:FindFirstChildOfClass("ForceField")) then continue end
+                    if (Checks["Forcefield Check"] and ffcoc(Object, "ForceField")) then continue end
                     if (Checks["Alive Check"] and not Atlanta:ClientAlive(Player, Character, Humanoid)) then continue end
                     --
-                    local Position, Visible = workspace.CurrentCamera:WorldToViewportPoint(RootPart.CFrame.Position)
-                    local Position2 = Vector2.new(Position.X, Position.Y)
+                    local Position, Visible = wtvp(cam, RootPart.CFrame.Position)
+                    local Position2 = vec2(Position.X, Position.Y)
                     local Magnitude = (MouseLocation - Position2).Magnitude
-                    local Distance = (workspace.CurrentCamera.CFrame.Position - RootPart.CFrame.Position).Magnitude
+                    local Distance = (cam.CFrame.Position - RootPart.CFrame.Position).Magnitude
                     local SelfAimAssistFOV = FieldOfView
                     local SelfDeadzoneFOV = Deadzone
                     local SelfMultiplier = 1
                     --
                     if FOVType == "Dynamic" then
-                        SelfMultiplier = (Distance - DynamicLow) > 0 and (1 - ((Distance - DynamicLow) / Dynamic)) or (1 + (math.clamp(math.abs((Distance - DynamicLow) * 1.75), 0, DynamicHigh) / 100)) * 1.25
+                        SelfMultiplier = (Distance - DynamicLow) > 0 and (1 - ((Distance - DynamicLow) / Dynamic)) or (1 + (clamp(abs((Distance - DynamicLow) * 1.75), 0, DynamicHigh) / 100)) * 1.25
                     end
                     --
                     if Visible and Magnitude <= PossibleTarget.Magnitude then
@@ -1742,7 +1760,7 @@ function Atlanta:GetAimAssistTarget()
                     if ((not Disabled) and not (Magnitude <= SelfAimAssistFOV)) then continue end
                     --
                     if Visible and Magnitude <= Target.Magnitude then
-                        local ClosestPart, ClosestVector, ClosestMagnitude = nil, nil, math.huge
+                        local ClosestPart, ClosestVector, ClosestMagnitude = nil, nil, huge
                         --
                         for Index2, Part in pairs(Atlanta:GetBodyParts(Object, RootPart, false, Hitboxes)) do
                             if (Checks["Visible Check"] and not (Part.Transparency ~= 1)) then continue end
@@ -1752,13 +1770,13 @@ function Atlanta:GetAimAssistTarget()
                             if Randomise then
                                 local HitboxSize = Part.Size / 2
                                 --
-                                HitboxPosition = Part.CFrame.Position + Vector3.new(math.random(1, HitboxSize.X), math.random(1, HitboxSize.Y), math.random(1, HitboxSize.Z))
+                                HitboxPosition = Part.CFrame.Position + vec3(rand(1, HitboxSize.X), rand(1, HitboxSize.Y), rand(1, HitboxSize.Z))
                             else
                                HitboxPosition = Part.CFrame.Position
                             end
                             --
-                            local Position3, Visible2 = workspace.CurrentCamera:WorldToViewportPoint(HitboxPosition)
-                            local Position4 = Vector2.new(Position3.X, Position3.Y)
+                            local Position3, Visible2 = wtvp(cam, HitboxPosition)
+                            local Position4 = vec2(Position3.X, Position3.Y)
                             local Magnitude2 = (MouseLocation - Position4).Magnitude
                             --
                             if Position4 and Visible2 then
@@ -1813,7 +1831,7 @@ function Atlanta:GetAimAssistTarget()
     function Atlanta:GetTriggerBotTarget()
         local Targets = {}
         --
-        local MouseLocation = uis:GetMouseLocation()
+        local MouseLocation = mouseloc(uis)
         --
         local Hitboxes = Options.hitb1.Value
         local Checks = Options.trigcheck.Value
@@ -1826,7 +1844,7 @@ function Atlanta:GetAimAssistTarget()
                 local Object, Humanoid, RootPart = Atlanta:ValidateClient(Player)
                 --
                 if (Object and Humanoid and RootPart) then
-                    if (Checks["Forcefield Check"] and Object:FindFirstChildOfClass("ForceField")) then continue end
+                    if (Checks["Forcefield Check"] and ffcoc(Object, "ForceField")) then continue end
                     if (Checks["Alive Check"] and not Atlanta:ClientAlive(Player, Character, Humanoid)) then continue end
                     --
                     for Index2, Part in pairs(Atlanta:GetBodyParts(Object, RootPart, false, Hitboxes)) do
@@ -1839,8 +1857,8 @@ function Atlanta:GetAimAssistTarget()
             end
         end
         --
-        local PointRay = workspace.CurrentCamera:ViewportPointToRay(MouseLocation.X, MouseLocation.Y, 0)
-        local Hit, Position, Normal, Material = workspace:FindPartOnRayWithWhitelist(Ray.new(PointRay.Origin, PointRay.Direction * 1000), Targets, false, false)
+        local PointRay = vptr(cam, MouseLocation.X, MouseLocation.Y, 0)
+        local Hit, Position, Normal, Material = fporwwl(workspace, ray(PointRay.Origin, PointRay.Direction * 1000), Targets, false, false)
         --
         if Hit then
             Atlanta.Locals.TriggerTarget = {
@@ -1864,9 +1882,9 @@ function Atlanta:GetAimAssistTarget()
             if not ((not Stutter == 100) and not ((tick() - Atlanta.Locals.LastStutter) >= (Stutter / 1000))) and not ((not Deadzone) and not (Atlanta.Locals.Target.Magnitude >= ((Atlanta.Locals.DeadzoneFOV * Multiplier) / 2))) then
                 Atlanta.Locals.LastStutter = tick()
                 --
-                local MouseLocation = uis:GetMouseLocation()
+                local MouseLocation = mouseloc(uis)
                 local MoveVector =  (Atlanta.Locals.Target.Vector - MouseLocation)
-                local Smoothness = Vector2.new((Options.horsm.Value / 2), (Options.versm.Value / 2))
+                local Smoothness = vec2((Options.horsm.Value / 2), (Options.versm.Value / 2))
                 --
                 if not DynamicSmoothing == 100 then
                     local SmoothingMultiplier = DynamicSmoothing
@@ -1878,7 +1896,7 @@ function Atlanta:GetAimAssistTarget()
                     end
                 end
                 --
-                local FinalVector = Vector2.new(math.round(MoveVector.X / Smoothness.X), math.round(MoveVector.Y / Smoothness.Y))
+                local FinalVector = vec2(round(MoveVector.X / Smoothness.X), round(MoveVector.Y / Smoothness.Y))
                 --
                 if Humaniser and Atlanta.Locals.Humaniser.Sample then
                     local Delta = 25 / Atlanta.Locals.Target.Magnitude
@@ -1887,7 +1905,7 @@ function Atlanta:GetAimAssistTarget()
                         local Tick = tick()
                         local HumaniserSample = Atlanta.Locals.Humaniser.Sample[Atlanta.Locals.Humaniser.Index]
                         --
-                        FinalVector = FinalVector + (Vector2.new(HumaniserSample[1], HumaniserSample[2]) * Delta)
+                        FinalVector = FinalVector + (vec2(HumaniserSample[1], HumaniserSample[2]) * Delta)
                         --
                         if (Tick - Atlanta.Locals.Humaniser.Tick) > 0.1 then
                             Atlanta.Locals.Humaniser.Tick = Tick
@@ -1932,7 +1950,7 @@ function Atlanta:GetAimAssistTarget()
     end
     --
     function Atlanta:UpdateFieldOfView()
-        local ScreenSize = workspace.CurrentCamera.ViewportSize
+        local ScreenSize = cam.ViewportSize
         --
         local FieldOfView = Options.aimfov.Value
         local Deadzone = Options.deadzone.Value
@@ -1947,7 +1965,7 @@ function Atlanta:GetAimAssistTarget()
 
 local loop = rs.Heartbeat:Connect(function(dt)
     local lplralive, char = alive()
-    local mousepos = uis:GetMouseLocation()
+    local mousepos = mouseloc(uis)
     local desynctype = Options.desynctype.Value
     local fakecf = nil
 
@@ -1989,7 +2007,7 @@ local loop = rs.Heartbeat:Connect(function(dt)
     if lplralive then
         hrpcf = char.HumanoidRootPart.CFrame
 
-        if Toggles.autojump.Value and uis:IsKeyDown(Enum.KeyCode.Space) and alive() then
+        if Toggles.autojump.Value and keydown(uis, Enum.KeyCode.Space) and alive() then
             char.Humanoid.Jump = true
         end
     
@@ -2013,13 +2031,13 @@ local loop = rs.Heartbeat:Connect(function(dt)
                 desync.run(Options.delayoff.Value, hrpcf)
             else
                 if desynctype == "Invisible" then
-                    fakecf = CFrame.new(9e9, 0/0, math.huge)
+                    fakecf = cframe(9e9, 0/0, huge)
                 elseif desynctype == "Underground" then
-                    fakecf = hrpcf * CFrame.new(0, -20, 0)
+                    fakecf = hrpcf * cframe(0, -20, 0)
                 elseif desynctype == "Zero" then
-                    fakecf = CFrame.new(0, 0, 0)
+                    fakecf = cframe(0, 0, 0)
                 elseif desynctype == "Sky" then
-                    fakecf = hrpcf * CFrame.new(0, 50, 0)
+                    fakecf = hrpcf * cframe(0, 50, 0)
                 else
                     fakecf = hrpcf
                 end
@@ -2033,23 +2051,23 @@ local loop = rs.Heartbeat:Connect(function(dt)
         end
 
         if Toggles.fly.Value then
-            local new = Vector3.new(0, 0, 0)
-            local lookvec = workspace.CurrentCamera.CFrame.LookVector
+            local new = vec3(0, 0, 0)
+            local lookvec = cam.CFrame.LookVector
 
-            if uis:IsKeyDown(Enum.KeyCode.W) then
+            if keydown(uis, Enum.KeyCode.W) then
                 new += lookvec
             end
-            if uis:IsKeyDown(Enum.KeyCode.S) then
+            if keydown(uis, Enum.KeyCode.S) then
                 new -= lookvec
             end
-            if uis:IsKeyDown(Enum.KeyCode.D) then
-                new += Vector3.new(-lookvec.Z, 0, lookvec.X)
+            if keydown(uis, Enum.KeyCode.D) then
+                new += vec3(-lookvec.Z, 0, lookvec.X)
             end
-            if uis:IsKeyDown(Enum.KeyCode.A) then
-                new += Vector3.new(lookvec.Z, 0, -lookvec.X)
+            if keydown(uis, Enum.KeyCode.A) then
+                new += vec3(lookvec.Z, 0, -lookvec.X)
             end
-            if uis:IsKeyDown(Enum.KeyCode.Space) then
-                new += Vector3.new(0, 1, 0)
+            if keydown(uis, Enum.KeyCode.Space) then
+                new += vec3(0, 1, 0)
             end
 
             if new.Unit.X == new.Unit.X then
@@ -2057,7 +2075,7 @@ local loop = rs.Heartbeat:Connect(function(dt)
                 char.HumanoidRootPart.Velocity = new.Unit * Options.flyspeed.Value
             else
                 char.HumanoidRootPart.Anchored = true
-                char.HumanoidRootPart.Velocity = Vector3.new()
+                char.HumanoidRootPart.Velocity = vec3()
             end
         else
             if char.HumanoidRootPart.Anchored then
@@ -2067,7 +2085,7 @@ local loop = rs.Heartbeat:Connect(function(dt)
 
         if Toggles.noclip.Value then
             for _, part in char:GetChildren() do
-                if (part:IsA("MeshPart") or part.Name == "HumanoidRootPart") and part.CanCollide == true then
+                if (isa(part, "MeshPart") or part.Name == "HumanoidRootPart") and part.CanCollide == true then
                     if not table.find(noclipparts, part) then
                         table.insert(noclipparts, part)
                     end
@@ -2078,19 +2096,17 @@ local loop = rs.Heartbeat:Connect(function(dt)
         end
 
         if Toggles.spin.Value then
-            if not spin then
-                spin = Instance.new("BodyAngularVelocity", char.HumanoidRootPart)
-                spin.Name = "spin"
-                spin.MaxTorque = Vector3.new(0, math.huge, 0)
-                spin.AngularVelocity = Vector3.new(0, Options.spinspeed.Value, 0)
-            else
-                spin.AngularVelocity = Vector3.new(0, Options.spinspeed.Value, 0)
+            spin = clamp(spin + round(Options.spinspeed.Value / 2), 0, 360)
+            
+            if spin == 360 then
+                spin = 0
             end
-        else
-            if spin then
-                spin:Destroy()
-                spin = nil
-            end
+
+            local camlook = cam.CFrame.LookVector
+            local angle = -atan2(camlook.Z, camlook.X) + rad(spin)
+            local endpos = cframe(char.HumanoidRootPart.Position) * angles(0, angle, 0)
+
+            char.HumanoidRootPart.CFrame = rotatey(endpos)
         end
     end
 end)
@@ -2104,7 +2120,15 @@ rs:BindToRenderStep("desync", 1, function()
     end
 end)
 
-Library:SetWatermarkVisibility(true)
+--[[rs.PostSimulation:Connect(function()
+    local plralive, char = alive()
+
+    if Toggles.blockpos.Value and plralive then
+        sethiddenproperty(char.HumanoidRootPart, "NetworkIsSleeping", true)
+    end
+end)]]
+
+Library:SetWatermarkVisibility(false)
 
 local FrameTimer = tick()
 local FrameCounter = 0;
@@ -2119,10 +2143,13 @@ local WatermarkConnection = game:GetService('RunService').RenderStepped:Connect(
 		FrameCounter = 0;
 	end;
 
-	Library:SetWatermark(('euphoria | %s fps | %s ms'):format(
-		math.floor(FPS),
-		math.floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue())
-	));
+    if Toggles.ShowWatermark.Value then
+	    Library:SetWatermark(('euphoria | %s fps | %s ms | %s'):format(
+		    floor(FPS),
+		    floor(game:GetService('Stats').Network.ServerStatsItem['Data Ping']:GetValue()),
+            os.date("%H:%M:%S")
+        ));
+    end
 end);
 
 Library:OnUnload(function()
@@ -2133,7 +2160,8 @@ end)
 
 local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
 
-MenuGroup:AddToggle("KeybindMenuOpen", { Default = Library.KeybindFrame.Visible, Text = "Open Keybind Menu", Callback = function(value) Library.KeybindFrame.Visible = value end})
+MenuGroup:AddToggle("KeybindMenuOpen", { Default = Library.KeybindFrame.Visible, Text = "Show Keybinds", Callback = function(value) Library.KeybindFrame.Visible = value end})
+MenuGroup:AddToggle("ShowWatermark", { Default = false, Text = "Show Watermark", Callback = function(value) Library:SetWatermarkVisibility(value) end})
 MenuGroup:AddToggle("ShowCustomCursor", {Text = "Custom Cursor", Default = true, Callback = function(Value) Library.ShowCustomCursor = Value end})
 MenuGroup:AddToggle("RainbowTheme", {Text = "Rainbow Theme", Default = false})
 MenuGroup:AddDivider()
@@ -2167,7 +2195,7 @@ rs.RenderStepped:Connect(function()
                 local yPos = Instance.AbsolutePosition.Y
 
                 local Mapped = Library:MapValue(yPos, 0, 1080, 0, 0.3) / 0.45
-                local Color = Color3.fromHSV((Library.CurrentRainbowHue - Mapped) % 1, 0.59, 1)
+                local Color = col3hsv((Library.CurrentRainbowHue - Mapped) % 1, 0.59, 1)
 
                 if ColorIdx == "AccentColorDark" then
                     Color = Library:GetDarkerColor(Color)
