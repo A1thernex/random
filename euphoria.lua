@@ -185,7 +185,6 @@ local default = {
     Lighting = {
         ClockTime = lighting.ClockTime,
         Brightness = lighting.Brightness,
-        ExposureCompensation = lighting.ExposureCompensation,
 
         Ambient = lighting.Ambient,
         OutdoorAmbient = lighting.OutdoorAmbient,
