@@ -232,9 +232,14 @@ oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
 
                 local HitPart = getClosestPlayer()
                 if HitPart then
-                    Arguments[3] = getDirection(A_Origin, HitPart.Position)
-
-                    return oldNamecall(unpack(Arguments))
+                    return {
+                        ["Instance"] = HitPart,
+                        ["Position"] = HitPart.Position,
+                        ["Normal"] = Vector3.new()
+                    }
+                    --[[Arguments[3] = getDirection(A_Origin, HitPart.Position)
+                            
+                    return oldNamecall(unpack(Arguments))]]
                 end
             end
         end
