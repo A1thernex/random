@@ -573,7 +573,7 @@ makeFunction({"rsloop", "rsLoop", "RsLoop", "runserviceloop", "runserviceLoop", 
     end
 end)
 
-makeFunction({"disconnectrsloop, disconnectrsLoop", "disconnectRsLoop", "DisconnectRsLoop"}, function(id: string)
+makeFunction({"disconnectrsloop", "disconnectrsLoop", "disconnectRsLoop", "DisconnectRsLoop"}, function(id: string)
     assert(id, "missing argument #1 (string expected)")
     assert(type(id) == "string", "invalid argument #1 (string expected, got " .. type(id) .. " instead)")
     
